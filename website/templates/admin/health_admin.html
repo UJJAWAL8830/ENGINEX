@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Admin | JanSetu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .ticker-wrap {
+            width: 100%; overflow: hidden; background-color: #fef3c7; padding-left: 100%; box-sizing: border-box;
+        }
+        .ticker {
+            display: inline-block; white-space: nowrap; padding-right: 100%; box-sizing: border-box; animation: ticker 30s linear infinite;
+        }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+    </style>
+</head>
+<body class="bg-[#f2f0e9] text-stone-800 antialiased selection:bg-amber-200">
+
+    <div class="fixed top-0 z-[60] w-full h-8 bg-amber-100 border-b border-amber-200 flex items-center text-xs font-bold text-amber-900">
+        <div class="px-4 bg-green-200 h-full flex items-center z-10 shadow-sm">SYSTEM STATUS:</div>
+        <div class="ticker-wrap h-full flex items-center bg-green-100 text-green-900">
+            <div class="ticker">
+                All Servers Operational • High OPD Load in District 4 • 12 New Hospitals Empanelled • Ayushman Bharat API Latency: 45ms • Emergency Ward Occupancy at 82%.
+            </div>
+        </div>
+    </div>
+
+    <nav class="fixed top-8 w-full z-50 bg-[#faf9f6]/95 backdrop-blur-md border-b border-stone-200 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <a href="#" class="flex items-center">
+                    <span class="font-logo text-3xl font-extrabold text-stone-900 tracking-tight">
+                        JAN<span class="text-green-500">SETU</span> <span class="text-blue-600 text-sm font-medium ml-2 uppercase tracking-widest">Health Admin</span>
+                    </span>
+                </a>
+
+                <!-- Menu options removed as requested -->
+
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex items-center gap-3 px-3 py-1 bg-white rounded-full border border-stone-200 shadow-sm">
+                        <img src="https://ui-avatars.com/api/?name=Dr+Rao&background=1c1917&color=fff" class="w-8 h-8 rounded-full border-2 border-blue-100">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-stone-800 leading-none">Dr. V. Rao</span>
+                            <span class="text-[10px] text-blue-600 font-bold leading-none">● Super Admin</span>
+                        </div>
+                    </div>
+                    <a href="/logout" class="p-2 text-stone-400 hover:text-red-600 transition-colors">
+                        <i data-lucide="power" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative w-full pt-32 pb-32 overflow-hidden bg-stone-900">
+        <img src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?q=80&w=2128&auto=format&fit=crop" 
+             class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-luminosity">
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/60 to-transparent"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-end pb-12">
+            <div class="max-w-2xl mb-8 md:mb-0">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-300 text-xs font-bold uppercase mb-4">
+                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span> Live Ops Center
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
+                    National Health <br> Command Center
+                </h1>
+                <p class="text-stone-300 text-lg font-light max-w-lg">
+                    Monitor hospital capacity, approve medical practitioners, and oversee national health schemes in real-time.
+                </p>
+            </div>
+            
+            <div class="text-right text-stone-400">
+                <p class="text-3xl font-bold text-white" id="clock">10:42 AM</p>
+                <p class="text-sm font-medium">Admin Access: Level 1</p>
+                <p class="text-xs mt-1 text-blue-400">Secure Connection • AES-256</p>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="relative z-20 -mt-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="glass-panel rounded-2xl shadow-xl p-6 grid grid-cols-1 md:grid-cols-4 gap-6 divide-y md:divide-y-0 md:divide-x divide-stone-200">
+                
+                <div class="flex items-center gap-4 px-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
+                        <i data-lucide="calendar-check" class="h-6 w-6 text-blue-700"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Bookings</p>
+                        <h3 class="text-2xl font-bold text-stone-800">14,205</h3>
+                        <p class="text-xs font-medium text-green-600">↑ 8% Today</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 px-4">
+                    <div class="w-12 h-12 rounded-full bg-teal-50 flex items-center justify-center border border-teal-100">
+                        <i data-lucide="bed" class="h-6 w-6 text-teal-700"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Bed Occupancy</p>
+                        <h3 class="text-2xl font-bold text-stone-800">78%</h3>
+                        <p class="text-xs font-medium text-amber-600">High in Zone 4</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 px-4">
+                    <div class="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center border border-purple-100">
+                        <i data-lucide="file-plus" class="h-6 w-6 text-purple-700"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Approvals</p>
+                        <h3 class="text-2xl font-bold text-stone-800">342</h3>
+                        <p class="text-xs font-medium text-stone-500">Pending Review</p>
+                    </div>
+                </div>
+
+                 <div class="flex items-center gap-4 px-4">
+                    <div class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center border border-red-100">
+                        <i data-lucide="ambulance" class="h-6 w-6 text-red-700"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Ambulances</p>
+                        <h3 class="text-2xl font-bold text-stone-800">1,204</h3>
+                        <p class="text-xs font-medium text-green-600">Active Now</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-2 space-y-8">
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-stone-800">Patient Registration Trends</h3>
+                        <select class="text-xs bg-stone-100 border-none rounded-md px-2 py-1 text-stone-600 cursor-pointer">
+                            <option>Last 6 Months</option>
+                            <option>This Year</option>
+                        </select>
+                    </div>
+                    <div class="h-64 w-full">
+                        <canvas id="healthChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-stone-100 bg-stone-50/50 flex justify-between items-center">
+                        <h3 class="text-sm font-bold text-stone-700">Live Hospital Activity</h3>
+                        <button class="text-xs text-blue-600 font-bold hover:underline">View All</button>
+                    </div>
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-stone-400 uppercase bg-stone-50">
+                            <tr>
+                                <th class="px-6 py-3">Hospital</th>
+                                <th class="px-6 py-3">Event</th>
+                                <th class="px-6 py-3">Time</th>
+                                <th class="px-6 py-3">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-100">
+                            <tr>
+                                <td class="px-6 py-4 font-medium">Apollo City Center</td>
+                                <td class="px-6 py-4">Bed Capacity Full</td>
+                                <td class="px-6 py-4">10:05 AM</td>
+                                <td class="px-6 py-4 text-red-600 font-bold">Alert</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium">Civil Hospital, AMD</td>
+                                <td class="px-6 py-4">New Doctor Onboarded</td>
+                                <td class="px-6 py-4">09:45 AM</td>
+                                <td class="px-6 py-4 text-green-600 font-bold">Success</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium">Unity Care</td>
+                                <td class="px-6 py-4">Scheme Claim #9921</td>
+                                <td class="px-6 py-4">09:30 AM</td>
+                                <td class="px-6 py-4 text-amber-600 font-bold">Processing</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                
+                <div class="bg-stone-900 text-white p-6 rounded-2xl shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16"></div>
+                    <h3 class="text-lg font-bold mb-4">Pending Approvals</h3>
+                    <p class="text-stone-400 text-sm mb-6">Action required on 5 new provider applications.</p>
+                    
+                    <div class="space-y-3">
+                        <div class="bg-white/10 p-3 rounded-lg flex items-center justify-between hover:bg-white/20 cursor-pointer transition-all">
+                            <div>
+                                <p class="text-sm font-medium text-white">Dr. A. Verma</p>
+                                <p class="text-xs text-stone-400">Cardiologist Application</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="p-1 bg-green-500/20 text-green-400 rounded"><i data-lucide="check" class="w-4 h-4"></i></button>
+                                <button class="p-1 bg-red-500/20 text-red-400 rounded"><i data-lucide="x" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                        <div class="bg-white/10 p-3 rounded-lg flex items-center justify-between hover:bg-white/20 cursor-pointer transition-all">
+                             <div>
+                                <p class="text-sm font-medium text-white">Apex Hospital</p>
+                                <p class="text-xs text-stone-400">Empanelment Request</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="p-1 bg-green-500/20 text-green-400 rounded"><i data-lucide="check" class="w-4 h-4"></i></button>
+                                <button class="p-1 bg-red-500/20 text-red-400 rounded"><i data-lucide="x" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all">
+                        View All Requests
+                    </button>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm">
+                    <h3 class="text-sm font-bold text-stone-700 mb-4">Quick Actions</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button class="p-3 border border-stone-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition text-center flex flex-col items-center gap-2">
+                            <i data-lucide="plus-circle" class="text-blue-500 w-5 h-5"></i>
+                            <span class="text-xs font-bold">Add Hospital</span>
+                        </button>
+                        <button class="p-3 border border-stone-200 rounded-xl hover:border-teal-500 hover:bg-teal-50 transition text-center flex flex-col items-center gap-2">
+                            <i data-lucide="database" class="text-teal-500 w-5 h-5"></i>
+                            <span class="text-xs font-bold">Update Beds</span>
+                        </button>
+                         <button class="p-3 border border-stone-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition text-center flex flex-col items-center gap-2">
+                            <i data-lucide="alert-triangle" class="text-red-500 w-5 h-5"></i>
+                            <span class="text-xs font-bold">Broadcast</span>
+                        </button>
+                         <button class="p-3 border border-stone-200 rounded-xl hover:border-purple-500 hover:bg-purple-50 transition text-center flex flex-col items-center gap-2">
+                            <i data-lucide="file-text" class="text-purple-500 w-5 h-5"></i>
+                            <span class="text-xs font-bold">New Scheme</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+<!-- Hospital Registry Section -->
+<div class="py-12 bg-[#f7f7f4]">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-stone-900 mb-1">Hospital Registry</h2>
+                <p class="text-stone-500 text-sm">Manage empanelled healthcare facilities.</p>
+            </div>
+            <button class="bg-stone-900 hover:bg-stone-800 text-white font-bold px-6 py-2 rounded-full shadow flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add Hospital</button>
+        </div>
+        <div class="space-y-4">
+            <div class="flex items-center bg-white rounded-xl shadow border border-stone-200 p-4 gap-4">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-700 text-lg">AH</div>
+                <div class="flex-1">
+                    <div class="font-bold text-stone-900">Apollo Hospital</div>
+                    <div class="text-xs text-stone-500">City Center, Ahmedabad • ID: #HOS-102</div>
+                </div>
+                <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Empanelled</span>
+                <span class="bg-stone-100 text-stone-700 text-xs font-bold px-2 py-1 rounded">250 Beds</span>
+                <button class="text-stone-400 hover:text-blue-600"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+                <button class="text-stone-400 hover:text-red-600"><i data-lucide="trash" class="w-4 h-4"></i></button>
+            </div>
+            <div class="flex items-center bg-white rounded-xl shadow border border-stone-200 p-4 gap-4">
+                <div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center font-bold text-teal-700 text-lg">CH</div>
+                <div class="flex-1">
+                    <div class="font-bold text-stone-900">Civil Hospital</div>
+                    <div class="text-xs text-stone-500">Asarwa, Ahmedabad • ID: #HOS-001</div>
+                </div>
+                <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Govt. Funded</span>
+                <span class="bg-stone-100 text-stone-700 text-xs font-bold px-2 py-1 rounded">1200 Beds</span>
+                <button class="text-stone-400 hover:text-blue-600"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+                <button class="text-stone-400 hover:text-red-600"><i data-lucide="trash" class="w-4 h-4"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Registered Practitioners Section -->
+<div class="py-12 bg-[#f5f3ed]">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-stone-900 mb-1">Registered Practitioners</h2>
+                <p class="text-stone-500 text-sm">Verify and manage medical staff.</p>
+            </div>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded-full shadow flex items-center gap-2"><i data-lucide="user-plus" class="w-4 h-4"></i> Add Doctor</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-2xl shadow border border-stone-200 p-8 flex flex-col items-center">
+                <div class="w-16 h-16 rounded-full bg-yellow-400 flex items-center justify-center font-bold text-stone-900 text-2xl mb-4">AM</div>
+                <div class="font-bold text-stone-900 text-lg">Dr. Arun Mehta</div>
+                <div class="text-blue-700 text-xs font-bold mb-1">CARDIOLOGIST</div>
+                <div class="text-xs text-stone-500 mb-2">Apollo Hospital • 12 Yrs Exp.</div>
+                <button class="mt-2 px-6 py-2 bg-stone-900 text-white rounded-full font-bold text-xs">View Profile</button>
+            </div>
+            <div class="bg-white rounded-2xl shadow border border-stone-200 p-8 flex flex-col items-center">
+                <div class="w-16 h-16 rounded-full bg-red-300 flex items-center justify-center font-bold text-stone-900 text-2xl mb-4">SK</div>
+                <div class="font-bold text-stone-900 text-lg">Dr. Sarah Khan</div>
+                <div class="text-blue-700 text-xs font-bold mb-1">PEDIATRICIAN</div>
+                <div class="text-xs text-stone-500 mb-2">Civil Hospital • 8 Yrs Exp.</div>
+                <button class="mt-2 px-6 py-2 bg-stone-900 text-white rounded-full font-bold text-xs">View Profile</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grievance Reports Section -->
+<div class="py-12 bg-[#f7f7f4]">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-2xl font-bold text-stone-900 mb-1">Grievance Reports</h2>
+        <p class="text-stone-500 text-sm mb-8">Analysis of citizen complaints.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white rounded-2xl shadow border border-stone-200 p-6 flex flex-col items-center">
+                <h3 class="text-lg font-bold text-stone-800 mb-4">Complaints by Category</h3>
+                <canvas id="complaintsChart" width="180" height="180"></canvas>
+            </div>
+            <div class="bg-white rounded-2xl shadow border border-stone-200 p-6 flex flex-col items-center justify-center">
+                <h3 class="text-lg font-bold text-stone-800 mb-2">Total Complaints</h3>
+                <div class="text-4xl font-extrabold text-stone-900 mb-2">842</div>
+                <div class="flex gap-2">
+                    <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">RESOLVED</span>
+                    <span class="bg-stone-100 text-stone-700 text-xs font-bold px-2 py-1 rounded">Pending: 58</span>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow border border-stone-200 p-6 flex flex-col items-center justify-center">
+                <h3 class="text-lg font-bold text-stone-800 mb-2">Top Issue</h3>
+                <div class="text-2xl font-bold text-red-600 mb-2">Medicine Supply</div>
+                <p class="text-xs text-stone-500">Most reported issue this month.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <footer class="bg-stone-900 text-stone-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-2 mb-6">
+                <i data-lucide="building-2" class="h-6 w-6 text-amber-500"></i>
+                <span class="font-bold text-xl text-white">JAN<span class="text-amber-500">SETU</span></span>
+            </div>
+            <p class="mb-8 text-sm max-w-md mx-auto">Admin Portal - Restricted Access Only.</p>
+            <p class="text-xs opacity-50">© 2026 Government of India. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Chart
+        const ctx = document.getElementById('healthChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Registrations',
+                    data: [12000, 19000, 15000, 25000, 22000, 30000],
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+
+        // Complaints by Category Pie Chart
+        const complaintsCtx = document.getElementById('complaintsChart').getContext('2d');
+        new Chart(complaintsCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Medicine Supply', 'Staff Behavior', 'Cleanliness', 'Billing Issues', 'Other'],
+                datasets: [{
+                    data: [42, 18, 15, 10, 15],
+                    backgroundColor: [
+                        '#ef4444', // Medicine Supply
+                        '#f59e42', // Staff Behavior
+                        '#10b981', // Cleanliness
+                        '#6366f1', // Billing Issues
+                        '#fbbf24'  // Other
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    animateRotate: true,
+                    animateScale: true
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: '#222',
+                            font: { size: 13, family: 'Inter, sans-serif' }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agriculture Admin | JanSetu</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .brand-font { font-family: 'Playfair Display', serif; }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .ticker-wrap {
+            width: 100%; overflow: hidden; background-color: #fafcdc; padding-left: 100%; box-sizing: border-box;
+        }
+        .ticker {
+            display: inline-block; white-space: nowrap; padding-right: 100%; box-sizing: border-box; animation: ticker 30s linear infinite;
+        }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+        /* Modal */
+        .modal { transition: opacity 0.25s ease; }
+        body.modal-active { overflow: hidden; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-[#f2f0e9] text-stone-800 antialiased selection:bg-yellow-200">
+
+    <div class="fixed top-0 z-[60] w-full h-8 bg-yellow-100 border-b border-yellow-200 flex items-center text-xs font-bold text-yellow-900">
+        <div class="px-4 bg-yellow-200 h-full flex items-center z-10 shadow-sm">MARKET STATUS:</div>
+        <div class="ticker-wrap h-full flex items-center">
+            <div class="ticker">
+                    Wheat MSP raised by 8% • New Crop Insurance Scheme Launched • 12,000 Farmers Registered for Subsidy • Rainfall Alert: North Zone • Market Prices Stable.
+            </div>
+        </div>
+    </div>
+
+    <nav class="fixed top-8 w-full z-50 bg-[#faf9f6]/95 backdrop-blur-md border-b border-stone-200 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <a href="#" class="flex items-center">
+                    <span class="font-logo text-3xl font-extrabold text-stone-900 tracking-tight">
+                         JAN<span class="text-yellow-700">SETU</span> <span class="text-blue-600 text-sm font-medium ml-2 uppercase tracking-widest">Agri Admin</span>
+                    </span>
+                    
+                </a>
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex items-center gap-3 px-3 py-1 bg-white rounded-full border border-stone-200 shadow-sm">
+                        <img src="https://ui-avatars.com/api/?name=R+Singh&background=1c1917&color=fff" class="w-8 h-8 rounded-full border-2 border-green-100">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-stone-800 leading-none">R. Singh</span>
+                            <span class="text-[10px] text-green-600 font-bold leading-none">● Director</span>
+                        </div>
+                    </div>
+                    <a href="/logout" class="p-2 text-stone-400 hover:text-red-600 transition-colors"><i data-lucide="power" class="w-5 h-5"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative w-full pt-32 pb-32 overflow-hidden bg-stone-900">
+        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop" 
+             class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-luminosity">
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/60 to-transparent"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-end pb-12">
+            <div class="max-w-2xl mb-8 md:mb-0">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/20 border border-green-500/30 text-green-300 text-xs font-bold uppercase mb-4">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Data Sync: Live
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">Agriculture <br> Oversight Dashboard</h1>
+                <p class="text-stone-300 text-lg font-light max-w-lg">Manage crop prices, monitor scheme disbursements, and resolve farmer grievances.</p>
+            </div>
+            <div class="text-right text-stone-400">
+                <p class="text-3xl font-bold text-white" id="clock">10:42 AM</p>
+                <p class="text-sm font-medium">Zone: North Gujarat</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative z-20 -mt-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="glass-panel rounded-2xl shadow-xl p-6 grid grid-cols-1 md:grid-cols-4 gap-6 divide-y md:divide-y-0 md:divide-x divide-stone-200">
+                <div class="flex items-center gap-4 px-4">
+                    <div class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center border border-green-100">
+                        <i data-lucide="tractor" class="h-6 w-6 text-green-700"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Registered Farmers</p>
+                        <h3 class="text-2xl font-bold text-stone-800">45.2 L</h3>
+                        <p class="text-xs font-medium text-green-600">↑ 1.2k this week</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 px-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
+                        <i data-lucide="file-check-2" class="h-6 w-6 text-blue-700"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Active Schemes</p>
+                        <h3 class="text-2xl font-bold text-stone-800">18</h3>
+                        <p class="text-xs font-medium text-stone-500">Total Running</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 px-4">
+                    <div class="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center border border-amber-100">
+                        <i data-lucide="check-circle-2" class="h-6 w-6 text-amber-700"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Resolved Complaints</p>
+                        <h3 class="text-2xl font-bold text-stone-800">92%</h3>
+                        <p class="text-xs font-medium text-green-600">Within SLA</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 px-4">
+                    <div class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center border border-red-100">
+                        <i data-lucide="cloud-rain" class="h-6 w-6 text-red-700"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Alert Coverage</p>
+                        <h3 class="text-2xl font-bold text-stone-800">12 Dists</h3>
+                        <p class="text-xs font-medium text-red-600">Active Warning</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+
+        <section>
+            <h2 class="text-2xl font-bold text-stone-900 brand-font mb-6">Quick Actions</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button class="p-4 bg-white border border-stone-200 rounded-xl hover:border-green-500 hover:shadow-md transition text-left group">
+                    <i data-lucide="file-cog" class="w-6 h-6 text-green-600 mb-2 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-stone-800">Manage Schemes</h3>
+                    <p class="text-xs text-stone-500">Add or edit govt programs</p>
+                </button>
+                <button class="p-4 bg-white border border-stone-200 rounded-xl hover:border-green-500 hover:shadow-md transition text-left group">
+                    <i data-lucide="map-pin" class="w-6 h-6 text-green-600 mb-2 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-stone-800">Monitor Centres</h3>
+                    <p class="text-xs text-stone-500">Track KVK & Soil Labs</p>
+                </button>
+                <button class="p-4 bg-white border border-stone-200 rounded-xl hover:border-green-500 hover:shadow-md transition text-left group">
+                    <i data-lucide="message-square-warning" class="w-6 h-6 text-green-600 mb-2 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-stone-800">Review Complaints</h3>
+                    <p class="text-xs text-stone-500">Resolve farmer grievances</p>
+                </button>
+                <button class="p-4 bg-white border border-stone-200 rounded-xl hover:border-green-500 hover:shadow-md transition text-left group">
+                    <i data-lucide="indian-rupee" class="w-6 h-6 text-green-600 mb-2 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-stone-800">Update Crop Pricing</h3>
+                    <p class="text-xs text-stone-500">Set daily MSP rates</p>
+                </button>
+            </div>
+        </section>
+
+        <section class="grid lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-xl text-stone-800 brand-font">Recent Scheme Applications</h3>
+                    <button class="text-sm font-bold text-green-700 hover:underline">View All</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-stone-400 uppercase bg-stone-50">
+                            <tr>
+                                <th class="p-3 rounded-l-lg">Applicant</th>
+                                <th class="p-3">Scheme</th>
+                                <th class="p-3">Status</th>
+                                <th class="p-3 rounded-r-lg text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-100">
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="p-3 font-bold text-stone-700">Ramesh Kumar</td>
+                                <td class="p-3">Soil Health Card</td>
+                                <td class="p-3"><span class="bg-amber-100 text-amber-700 px-2 py-1 rounded text-xs font-bold">Pending Review</span></td>
+                                <td class="p-3 text-right">
+                                    <button class="text-green-600 hover:bg-green-50 p-1.5 rounded mr-1" title="Approve"><i data-lucide="check" class="w-4 h-4"></i></button>
+                                    <button class="text-red-600 hover:bg-red-50 p-1.5 rounded" title="Reject"><i data-lucide="x" class="w-4 h-4"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="p-3 font-bold text-stone-700">Sunita Ben</td>
+                                <td class="p-3">PM-KISAN</td>
+                                <td class="p-3"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold">Docs Verified</span></td>
+                                <td class="p-3 text-right">
+                                    <button class="text-green-600 hover:bg-green-50 p-1.5 rounded mr-1"><i data-lucide="check" class="w-4 h-4"></i></button>
+                                    <button class="text-red-600 hover:bg-red-50 p-1.5 rounded"><i data-lucide="x" class="w-4 h-4"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="p-3 font-bold text-stone-700">Vikram Singh</td>
+                                <td class="p-3">Crop Insurance</td>
+                                <td class="p-3"><span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-bold">Action Req.</span></td>
+                                <td class="p-3 text-right">
+                                    <button class="text-green-600 hover:bg-green-50 p-1.5 rounded mr-1"><i data-lucide="check" class="w-4 h-4"></i></button>
+                                    <button class="text-red-600 hover:bg-red-50 p-1.5 rounded"><i data-lucide="x" class="w-4 h-4"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-stone-800">Price Trends (Wheat)</h3>
+                    <button class="text-xs bg-stone-900 text-white px-3 py-1.5 rounded-lg font-bold">Update</button>
+                </div>
+                <div class="h-64 w-full">
+                    <canvas id="agriChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col h-full">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-xl text-stone-900 brand-font">Complaints Management</h3>
+                    <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">5 Open</span>
+                </div>
+                
+                <div class="flex gap-4 mb-6">
+                    <div class="flex-1 bg-stone-50 p-4 rounded-xl text-center border border-stone-100">
+                        <span class="block text-2xl font-bold text-stone-800">142</span>
+                        <span class="text-xs text-stone-500 font-bold uppercase">Total</span>
+                    </div>
+                    <div class="flex-1 bg-green-50 p-4 rounded-xl text-center border border-green-100">
+                        <span class="block text-2xl font-bold text-green-700">137</span>
+                        <span class="text-xs text-green-600 font-bold uppercase">Resolved</span>
+                    </div>
+                </div>
+
+                <div class="flex-1 space-y-3">
+                    <div class="p-3 border border-stone-100 rounded-xl flex items-center justify-between hover:bg-stone-50 transition">
+                        <div>
+                            <p class="font-bold text-sm text-stone-800">Water Canal Blockage</p>
+                            <p class="text-xs text-stone-500">ID: #GR-992 • North Zone</p>
+                        </div>
+                        <button class="px-3 py-1 bg-stone-900 text-white text-xs font-bold rounded-lg hover:bg-stone-700">Resolve</button>
+                    </div>
+                    <div class="p-3 border border-stone-100 rounded-xl flex items-center justify-between hover:bg-stone-50 transition">
+                        <div>
+                            <p class="font-bold text-sm text-stone-800">Seed Quality Issue</p>
+                            <p class="text-xs text-stone-500">ID: #GR-995 • District 4</p>
+                        </div>
+                        <button class="px-3 py-1 bg-stone-900 text-white text-xs font-bold rounded-lg hover:bg-stone-700">Resolve</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-stone-900 text-white p-6 rounded-2xl shadow-xl relative overflow-hidden flex flex-col">
+                <div class="absolute top-0 right-0 w-48 h-48 bg-green-600 rounded-full blur-3xl opacity-20 -mr-10 -mt-10"></div>
+                
+                <div class="flex justify-between items-center mb-6 relative z-10">
+                    <h3 class="font-bold text-xl brand-font">Centre Management</h3>
+                    <button class="bg-green-600 hover:bg-green-500 text-white p-2 rounded-lg transition"><i data-lucide="plus" class="w-5 h-5"></i></button>
+                </div>
+
+                <div class="space-y-4 relative z-10 flex-1 overflow-y-auto">
+                    <div class="bg-white/10 p-4 rounded-xl flex items-center justify-between backdrop-blur-sm hover:bg-white/20 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 font-bold">K1</div>
+                            <div>
+                                <p class="font-bold text-sm">KVK North</p>
+                                <p class="text-xs text-stone-400">Operational • 12 Staff</p>
+                            </div>
+                        </div>
+                        <button class="text-xs border border-stone-600 px-2 py-1 rounded hover:bg-stone-800">Update</button>
+                    </div>
+                    
+                    <div class="bg-white/10 p-4 rounded-xl flex items-center justify-between backdrop-blur-sm hover:bg-white/20 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 font-bold">S2</div>
+                            <div>
+                                <p class="font-bold text-sm">Soil Lab - District 2</p>
+                                <p class="text-xs text-stone-400">Maintenance Req.</p>
+                            </div>
+                        </div>
+                        <button class="text-xs border border-stone-600 px-2 py-1 rounded hover:bg-stone-800">Update</button>
+                    </div>
+
+                    <div class="bg-white/10 p-4 rounded-xl flex items-center justify-between backdrop-blur-sm hover:bg-white/20 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 font-bold">K3</div>
+                            <div>
+                                <p class="font-bold text-sm">KVK South</p>
+                                <p class="text-xs text-stone-400">Operational • 8 Staff</p>
+                            </div>
+                        </div>
+                        <button class="text-xs border border-stone-600 px-2 py-1 rounded hover:bg-stone-800">Update</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-2 mb-6">
+                <i data-lucide="building-2" class="h-6 w-6 text-amber-500"></i>
+                <span class="font-bold text-xl text-white">JAN<span class="text-amber-500">SETU</span></span>
+            </div>
+            <p class="text-xs opacity-50">© 2026 Government of India. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); }
+        setInterval(updateClock, 1000); updateClock();
+        const ctx = document.getElementById('agriChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{ label: 'Wheat Price', data: [2100, 2150, 2120, 2180, 2200, 2250, 2240], borderColor: '#16a34a', backgroundColor: 'rgba(22, 163, 74, 0.1)', fill: true }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { display: false } }, x: { grid: { display: false } } } }
+        });
+    </script>
+</body>
+</html>

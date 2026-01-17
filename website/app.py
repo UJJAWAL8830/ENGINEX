@@ -87,7 +87,35 @@ def service_security():
 @app.route('/admin/dashboard')
 def admin_dashboard():
     dept = session.get('department', 'General')
-    return f"<h1>Welcome {dept} Admin (Dashboard Coming Soon)</h1>"
+    # Route to specific admin dashboard based on department
+    if dept.lower() == 'agriculture':
+        return render_template('admin/agriculture_admin.html')
+    elif dept.lower() == 'health':
+        return render_template('admin/health_admin.html')
+    elif dept.lower() == 'security':
+        return render_template('admin/security_admin.html')
+    else:
+        return f"<h1>Welcome {dept} Admin (Dashboard Coming Soon)</h1>"
+
+
+# Direct routes for admin pages (optional, for direct access)
+@app.route('/admin/agriculture')
+def admin_agriculture():
+    if session.get('role') != 'admin':
+        return redirect(url_for('login'))
+    return render_template('admin/agriculture_admin.html')
+
+@app.route('/admin/health')
+def admin_health():
+    if session.get('role') != 'admin':
+        return redirect(url_for('login'))
+    return render_template('admin/health_admin.html')
+
+@app.route('/admin/security')
+def admin_security():
+    if session.get('role') != 'admin':
+        return redirect(url_for('login'))
+    return render_template('admin/security_admin.html')
 
 @app.route('/developer/portal')
 def developer_portal():
