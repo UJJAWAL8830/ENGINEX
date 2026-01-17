@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Urban Security | JanSetu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        
+        /* SOS Pulse Animation */
+        .pulse-ring {
+            position: relative;
+            z-index: 10;
+        }
+        .pulse-ring::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            background-color: rgba(220, 38, 38, 0.6);
+            z-index: -1;
+            animation: pulse-ring-anim 2s infinite;
+        }
+        @keyframes pulse-ring-anim {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* Success Message Animation */
+        .toast-enter { transform: translateY(100%); opacity: 0; }
+        .toast-enter-active { transform: translateY(0); opacity: 1; transition: all 0.3s ease-out; }
+    </style>
+</head>
+<body class="bg-[#f2f0e9] text-stone-800 antialiased">
+
+    <nav class="fixed w-full z-50 bg-[#faf9f6]/95 border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i data-lucide="building-2" class="h-6 w-6 text-stone-900"></i>
+                <span class="font-bold text-xl text-stone-900">JAN<span class="text-amber-700">SETU</span></span>
+            </div>
+            <a href="/citizen/services" class="text-sm font-bold text-stone-500 hover:text-stone-900 flex gap-2">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Services
+            </a>
+        </div>
+    </nav>
+
+    <header class="pt-32 pb-12 bg-stone-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-red-950/40"></div>
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 border border-red-400/30 text-red-300 text-xs font-bold uppercase mb-4">
+                <i data-lucide="shield-alert" class="w-4 h-4"></i> Public Safety & Defense
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Urban Security</h1>
+            <p class="text-stone-300 max-w-2xl">24/7 Emergency response, crime reporting, and advanced disaster management.</p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-12 space-y-16">
+
+        <section class="bg-white border border-stone-200 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="relative flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                </span>
+                <span class="font-bold text-sm text-stone-600 uppercase tracking-wide">Live Incidents Nearby:</span>
+            </div>
+            <div class="flex-1 overflow-hidden relative h-6 w-full">
+                <div class="absolute w-full animate-pulse text-sm font-medium text-stone-800">
+                    <span class="text-red-600 font-bold">[Traffic]</span> Accident reported at SG Highway • <span class="text-amber-600 font-bold">[Fire]</span> Small fire contained in Sector 4.
+                </div>
+            </div>
+            <div class="text-xs font-bold text-stone-400">Updated: 2m ago</div>
+        </section>
+
+        <section class="grid md:grid-cols-2 gap-8 items-center">
+            
+            <div class="bg-white p-8 rounded-3xl border border-red-100 shadow-xl text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-red-500"></div>
+                <h3 class="text-2xl font-bold text-red-700 mb-2">Emergency SOS</h3>
+                <p class="text-stone-500 text-sm mb-8">Tap to instantly share location with PCR Van.</p>
+                
+                <button id="sosBtn" onclick="triggerSOS()" class="pulse-ring w-36 h-36 rounded-full bg-gradient-to-br from-red-600 to-red-700 text-white font-bold text-2xl shadow-2xl flex flex-col items-center justify-center mx-auto hover:scale-105 transition-transform active:scale-95 cursor-pointer border-4 border-red-100">
+                    <i data-lucide="power" class="w-10 h-10 mb-2"></i>
+                    <span id="sosText">HELP</span>
+                </button>
+                
+                <div id="sosStatus" class="mt-8 text-sm font-bold text-stone-400 transition-all opacity-0">
+                    Waiting for signal...
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <a href="tel:100" class="p-6 bg-white border border-stone-200 rounded-2xl hover:border-blue-500 hover:shadow-lg transition-all text-left group cursor-pointer">
+                    <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                        <i data-lucide="siren" class="w-5 h-5"></i>
+                    </div>
+                    <p class="font-bold text-lg text-stone-800">Police</p>
+                    <p class="text-stone-500 text-xs">Tap to Dial 100</p>
+                </a>
+                
+                <a href="tel:101" class="p-6 bg-white border border-stone-200 rounded-2xl hover:border-red-500 hover:shadow-lg transition-all text-left group cursor-pointer">
+                    <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center text-red-600 mb-3 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                        <i data-lucide="flame" class="w-5 h-5"></i>
+                    </div>
+                    <p class="font-bold text-lg text-stone-800">Fire</p>
+                    <p class="text-stone-500 text-xs">Tap to Dial 101</p>
+                </a>
+                
+                <a href="tel:1091" class="p-6 bg-white border border-stone-200 rounded-2xl hover:border-pink-500 hover:shadow-lg transition-all text-left group cursor-pointer">
+                    <div class="w-10 h-10 bg-pink-50 rounded-lg flex items-center justify-center text-pink-600 mb-3 group-hover:bg-pink-600 group-hover:text-white transition-colors">
+                        <i data-lucide="user-x" class="w-5 h-5"></i>
+                    </div>
+                    <p class="font-bold text-lg text-stone-800">Women</p>
+                    <p class="text-stone-500 text-xs">Tap to Dial 1091</p>
+                </a>
+                
+                <a href="tel:108" class="p-6 bg-white border border-stone-200 rounded-2xl hover:border-orange-500 hover:shadow-lg transition-all text-left group cursor-pointer">
+                    <div class="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center text-orange-600 mb-3 group-hover:bg-orange-600 group-hover:text-white transition-colors">
+                        <i data-lucide="cloud-lightning" class="w-5 h-5"></i>
+                    </div>
+                    <p class="font-bold text-lg text-stone-800">Disaster</p>
+                    <p class="text-stone-500 text-xs">Tap to Dial 108</p>
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold text-stone-900 mb-6">Safety Initiatives & Schemes</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm hover:border-stone-400 transition-all">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-pink-50 rounded-lg text-pink-600"><i data-lucide="heart-handshake" class="w-5 h-5"></i></div>
+                        <h3 class="font-bold text-lg">Nirbhaya Fund</h3>
+                    </div>
+                    <p class="text-sm text-stone-500 mb-4">Dedicated fund for implementation of initiatives aimed at enhancing the safety and security of women.</p>
+                    <button class="text-stone-900 font-bold text-sm underline">View Details</button>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm hover:border-stone-400 transition-all">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-blue-50 rounded-lg text-blue-600"><i data-lucide="building" class="w-5 h-5"></i></div>
+                        <h3 class="font-bold text-lg">Safe City Project</h3>
+                    </div>
+                    <p class="text-sm text-stone-500 mb-4">Smart surveillance, women police outposts, and better street lighting in 8 major cities.</p>
+                    <button class="text-stone-900 font-bold text-sm underline">Check Coverage</button>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm hover:border-stone-400 transition-all">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-purple-50 rounded-lg text-purple-600"><i data-lucide="laptop-2" class="w-5 h-5"></i></div>
+                        <h3 class="font-bold text-lg">Cyber Crime Portal</h3>
+                    </div>
+                    <p class="text-sm text-stone-500 mb-4">National portal to report online financial fraud and cyber harassment anonymously.</p>
+                    <button class="text-stone-900 font-bold text-sm underline">Report Online</button>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold text-stone-900 mb-6">Report an Incident</h2>
+                <div class="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm">
+                    <form onsubmit="submitReport(event)">
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-stone-500 mb-2">Incident Type</label>
+                                <select class="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-400 outline-none">
+                                    <option>Select Type</option>
+                                    <option>Theft / Robbery</option>
+                                    <option>Accident</option>
+                                    <option>Harassment</option>
+                                    <option>Public Nuisance</option>
+                                    <option>Pothole / Road Damage</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-stone-500 mb-2">Location</label>
+                                <div class="relative">
+                                    <input type="text" id="locationInput" placeholder="Tap icon to detect..." class="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl pl-10 focus:ring-2 focus:ring-stone-400 outline-none" readonly>
+                                    <i onclick="detectLocation()" data-lucide="map-pin" class="w-5 h-5 absolute left-3 top-3.5 text-red-500 cursor-pointer hover:scale-110 transition-transform" title="Detect Location"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-xs font-bold uppercase text-stone-500 mb-2">Description</label>
+                            <textarea rows="4" placeholder="Describe what happened in detail..." class="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-400 outline-none"></textarea>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-xs font-bold uppercase text-stone-500 mb-2">Evidence (Photo/Video)</label>
+                            <div class="border-2 border-dashed border-stone-300 rounded-xl p-8 text-center hover:bg-stone-50 cursor-pointer transition-colors" onclick="alert('File Picker opened (Mock)')">
+                                <i data-lucide="upload-cloud" class="w-8 h-8 text-stone-400 mx-auto mb-2"></i>
+                                <p class="text-sm text-stone-500">Click to upload files</p>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-stone-900 text-white font-bold py-4 rounded-xl hover:bg-stone-800 transition-all shadow-lg">
+                            Submit Report
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-stone-900 text-stone-500 py-8 text-center text-sm mt-12">
+        © 2026 JanSetu Security. Connected with National Disaster Management Authority.
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // 1. SOS Button Logic
+        function triggerSOS() {
+            const btn = document.getElementById('sosBtn');
+            const status = document.getElementById('sosStatus');
+            const text = document.getElementById('sosText');
+
+            // Simulate sending signal
+            status.style.opacity = "1";
+            status.innerHTML = "<span class='text-amber-500'>Connecting to GPS...</span>";
+            
+            setTimeout(() => {
+                status.innerHTML = "<span class='text-green-600'>✓ Location Sent to PCR Van (GJ-01-A-42)</span>";
+                text.innerText = "SENT";
+                btn.classList.remove('bg-gradient-to-br');
+                btn.classList.add('bg-green-600');
+                btn.classList.remove('pulse-ring');
+                
+                alert("MOCK ALERT: Emergency SOS signal sent to nearest Police Control Room with your coordinates.");
+            }, 1500);
+        }
+
+        // 2. Location Detection Logic
+        function detectLocation() {
+            const input = document.getElementById('locationInput');
+            input.placeholder = "Detecting...";
+            
+            setTimeout(() => {
+                input.value = "Lat: 23.0225° N, Long: 72.5714° E (Near Nehru Bridge)";
+            }, 1000);
+        }
+
+        // 3. Form Submit Logic
+        function submitReport(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "Submitting...";
+            
+            setTimeout(() => {
+                alert("Report Submitted Successfully! Ticket ID: #SEC-2026-9921");
+                btn.innerText = originalText;
+                e.target.reset();
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
