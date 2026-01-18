@@ -8,7 +8,7 @@
 
 ---
 
-![JanSetu Dashboard Screenshot](docs/images/dashboard-placeholder.png)
+![JanSetu Dashboard Screenshot](https://drive.google.com/file/d/1MRpCKE2zbcyBDNTx0Nu-m_-1HKZQhKws/view?usp=sharing)
 > Placeholder for dashboard screenshot
 
 ---
