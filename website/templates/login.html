@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Ingenium.Gov</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Smooth transitions for form swapping */
+        .form-transition {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="h-screen bg-[#faf9f6] text-stone-800 overflow-hidden">
+
+    <div class="flex w-full h-full">
+
+        <div class="hidden lg:flex w-1/2 bg-stone-900 relative items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
+                    alt="Digital Infrastructure" class="w-full h-full object-cover opacity-60 mix-blend-overlay">
+            </div>
+
+            <div class="absolute inset-0 bg-gradient-to-br from-amber-900/40 to-stone-900/90 z-10"></div>
+
+            <div class="relative z-20 text-center px-12 max-w-xl">
+                <div
+                    class="bg-white/10 backdrop-blur-md p-4 rounded-2xl inline-block mb-6 shadow-xl border border-white/10">
+                    <i data-lucide="shield-check" class="h-10 w-10 text-amber-400 mx-auto"></i>
+                </div>
+                <h1 class="text-5xl font-bold text-[#f5f0e8] mb-6 leading-tight">
+                    Secure. Scalable. <br> Seamless.
+                </h1>
+                <p class="text-stone-300 text-lg font-light leading-relaxed">
+                    Join the National Digital Public Infrastructure.
+                    Connecting millions of citizens with essential government services in real-time.
+                </p>
+
+                <div class="mt-12 flex gap-4 justify-center text-sm text-stone-400">
+                    <span class="flex items-center gap-1"><i data-lucide="check" class="w-4 h-4 text-amber-500"></i>
+                        Encrypted</span>
+                    <span class="flex items-center gap-1"><i data-lucide="check" class="w-4 h-4 text-amber-500"></i>
+                        Verified</span>
+                    <span class="flex items-center gap-1"><i data-lucide="check" class="w-4 h-4 text-amber-500"></i>
+                        24/7 Access</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-[#faf9f6] relative">
+
+            <a href="/"
+                class="absolute top-8 left-8 flex items-center gap-2 text-stone-500 hover:text-amber-700 transition-colors text-sm font-medium">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Home
+            </a>
+
+            <div class="w-full max-w-md">
+
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-stone-900 mb-2">Welcome Back</h2>
+                    <p class="text-stone-500">Please select your role to continue.</p>
+                </div>
+
+                <form action="/login" method="POST" id="mainForm">
+
+                    <div class="mb-6">
+                        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">I am
+                            a...</label>
+                        <div class="relative">
+                            <select id="roleSelector" name="role"
+                                class="w-full bg-white border border-stone-200 text-stone-800 text-sm rounded-xl focus:ring-amber-500 focus:border-amber-500 block p-3.5 shadow-sm font-medium appearance-none cursor-pointer transition-all hover:border-amber-300">
+                                <option value="citizen">Citizen</option>
+                                <option value="admin">Government Administrator</option>
+                                <option value="provider">Service Developer</option>
+                            </select>
+                            <div
+                                class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-stone-400">
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="loginSection">
+
+                        <div class="mb-4">
+                            <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Email
+                                Address</label>
+                            <div class="relative">
+                                <div
+                                    class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-stone-400">
+                                    <i data-lucide="mail" class="w-4 h-4"></i>
+                                </div>
+                                <input type="email" name="email" placeholder="name@example.com"
+                                    class="bg-white border border-stone-200 text-stone-900 text-sm rounded-xl focus:ring-amber-600 focus:border-amber-600 block w-full pl-10 p-3.5 shadow-sm placeholder-stone-400"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div id="deptField" class="hidden mb-4 bg-amber-50/50 p-4 rounded-xl border border-amber-100">
+                            <label class="block text-xs font-bold text-amber-800 uppercase tracking-wider mb-2">Select
+                                Department</label>
+                            <div class="relative">
+                                <select name="department"
+                                    class="w-full bg-white border border-amber-200 text-stone-800 text-sm rounded-lg focus:ring-amber-600 focus:border-amber-600 block p-2.5">
+                                    <option value="health">Health Department</option>
+                                    <option value="security">Security & Defense</option>
+                                    <option value="agriculture">Agriculture & Welfare</option>
+                                    <option value="urban">Urban Development</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label
+                                class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Password</label>
+                            <div class="relative">
+                                <div
+                                    class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-stone-400">
+                                    <i data-lucide="lock" class="w-4 h-4"></i>
+                                </div>
+                                <input type="password" name="password" placeholder="••••••••"
+                                    class="bg-white border border-stone-200 text-stone-900 text-sm rounded-xl focus:ring-amber-600 focus:border-amber-600 block w-full pl-10 p-3.5 shadow-sm placeholder-stone-400"
+                                    required>
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full text-white bg-stone-900 hover:bg-stone-800 focus:ring-4 focus:ring-stone-300 font-medium rounded-xl text-sm px-5 py-3.5 text-center shadow-lg hover:shadow-xl transition-all flex justify-center items-center gap-2">
+                            Secure Login <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <form action="/register" method="POST" id="registerSection" class="hidden">
+                    <input type="hidden" name="role" value="citizen">
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Full
+                                Name</label>
+                            <input type="text" name="name" placeholder="John Doe"
+                                class="bg-white border border-stone-200 text-stone-900 text-sm rounded-xl focus:ring-amber-600 focus:border-amber-600 block w-full p-3 shadow-sm">
+                        </div>
+                        <div>
+                            <label
+                                class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Mobile</label>
+                            <input type="tel" name="phone" placeholder="+91 9876..."
+                                class="bg-white border border-stone-200 text-stone-900 text-sm rounded-xl focus:ring-amber-600 focus:border-amber-600 block w-full p-3 shadow-sm">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Email
+                            Address</label>
+                        <input type="email" name="email" placeholder="name@example.com"
+                            class="bg-white border border-stone-200 text-stone-900 text-sm rounded-xl focus:ring-amber-600 focus:border-amber-600 block w-full p-3 shadow-sm">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label
+                                class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">State</label>
+                            <select id="stateSelect" name="state"
+                                class="bg-white border border-stone-200 text-stone-900 text-sm rounded-xl focus:ring-amber-600 focus:border-amber-600 block w-full p-3 shadow-sm">
+                                <option value="">Select State</option>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                <option value="Assam">Assam</option>
+                                <option value="Bihar">Bihar</option>
+                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                <option value="Goa">Goa</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Haryana">Haryana</option>
+                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                <option value="Jharkhand">Jharkhand</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Manipur">Manipur</option>
+                                <option value="Meghalaya">Meghalaya</option>
+                                <option value="Mizoram">Mizoram</option>
+                                <option value="Nagaland">Nagaland</option>
+                                <option value="Odisha">Odisha</option>
+                                <option value="Punjab">Punjab</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Sikkim">Sikkim</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Tripura">Tripura</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Uttarakhand">Uttarakhand</option>
+                                <option value="West Bengal">West Bengal</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                <option value="Ladakh">Ladakh</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label
+                                class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">City</label>
+                            <select id="citySelect" name="city"
+                                class="bg-white border border-stone-200 text-stone-900 text-sm rounded-xl focus:ring-amber-600 focus:border-amber-600 block w-full p-3 shadow-sm">
+                                <option value="">Select City</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Create
+                            Password</label>
+                        <input type="password" name="password" placeholder="Create a strong password"
+                            class="bg-white border border-stone-200 text-stone-900 text-sm rounded-xl focus:ring-amber-600 focus:border-amber-600 block w-full p-3 shadow-sm">
+                    </div>
+
+                    <button type="submit"
+                        class="w-full text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:ring-amber-300 font-medium rounded-xl text-sm px-5 py-3.5 text-center shadow-lg hover:shadow-xl transition-all">
+                        Create Citizen Account
+                    </button>
+                </form>
+
+                <div class="mt-6 text-center text-sm" id="toggleLinkContainer">
+                    <p class="text-stone-500">
+                        New Citizen?
+                        <a href="#" id="showRegisterBtn" class="font-bold text-amber-700 hover:underline">Register
+                            Here</a>
+                    </p>
+                </div>
+                <div class="mt-6 text-center text-sm hidden" id="loginLinkContainer">
+                    <p class="text-stone-500">
+                        Already have an account?
+                        <a href="#" id="showLoginBtn" class="font-bold text-stone-900 hover:underline">Login Here</a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const roleSelector = document.getElementById('roleSelector');
+        const deptField = document.getElementById('deptField');
+        const loginSection = document.getElementById('loginSection');
+        const registerSection = document.getElementById('registerSection');
+        const toggleLinkContainer = document.getElementById('toggleLinkContainer');
+        const loginLinkContainer = document.getElementById('loginLinkContainer');
+        const showRegisterBtn = document.getElementById('showRegisterBtn');
+        const showLoginBtn = document.getElementById('showLoginBtn');
+
+        // State/City Data
+        const cities = {
+            'Maharashtra': ['Mumbai', 'Pune', 'Nagpur'],
+            'Gujarat': ['Ahmedabad', 'Surat', 'Vadodara'],
+            'Delhi': ['New Delhi', 'North Delhi'],
+            'Karnataka': ['Bangalore', 'Mysore']
+        };
+
+        // 1. Role Change Logic
+        roleSelector.addEventListener('change', (e) => {
+            const role = e.target.value;
+
+            // Show Department only if Admin
+            if (role === 'admin') {
+                deptField.classList.remove('hidden');
+            } else {
+                deptField.classList.add('hidden');
+            }
+
+            // Hide Register Link if not Citizen (Only citizens can register)
+            if (role === 'citizen') {
+                toggleLinkContainer.classList.remove('hidden');
+            } else {
+                // If switching to admin/dev, force back to login view
+                toggleLinkContainer.classList.add('hidden');
+                loginLinkContainer.classList.add('hidden');
+                loginSection.classList.remove('hidden');
+                registerSection.classList.add('hidden');
+            }
+        });
+
+        // 2. Toggle Register/Login
+        showRegisterBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginSection.classList.add('hidden');
+            registerSection.classList.remove('hidden');
+            toggleLinkContainer.classList.add('hidden');
+            loginLinkContainer.classList.remove('hidden');
+            // Disable role selector while registering
+            roleSelector.disabled = true;
+        });
+
+        showLoginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerSection.classList.add('hidden');
+            loginSection.classList.remove('hidden');
+            loginLinkContainer.classList.add('hidden');
+            toggleLinkContainer.classList.remove('hidden');
+            roleSelector.disabled = false;
+        });
+
+        // 3. Populate Cities based on State
+        const stateSelect = document.getElementById('stateSelect');
+        const citySelect = document.getElementById('citySelect');
+
+        stateSelect.addEventListener('change', (e) => {
+            const state = e.target.value;
+            citySelect.innerHTML = '<option value="">Select City</option>'; // Clear previous
+
+            if (state && cities[state]) {
+                cities[state].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,9 +1,11 @@
+import redis
 from flask import Blueprint, render_template, request, flash, redirect, url_for,session
 from .models import Citizens
 from werkzeug.security import generate_password_hash
 from . import db
 
 auth = Blueprint('auth', __name__)
+
 
 @auth.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
@@ -29,7 +31,6 @@ def sign_up():
                 password_hash=generate_password_hash(password, method='pbkdf2:sha256'),
                 state=state,
                 city=city,
-                address=address
             )
             db.session.add(new_citizen)
             db.session.commit()
@@ -49,20 +50,20 @@ def login():
         user = Citizens.query.filter_by(email=email).first()
         role = 'citizen'
 
-        if not user:
-            user = GovEmployees.query.filter_by(email=email).first()
-            role = 'government'
+        # if not user:
+        #     user = GovEmployees.query.filter_by(email=email).first()
+        #     role = 'government'
 
-        if not user:
-            user = ServiceProviders.query.filter_by(email=email).first()
-            role = 'provider'
+        # if not user:
+        #     user = ServiceProviders.query.filter_by(email=email).first()
+        #     role = 'provider'
 
-        if user and check_password_hash(user.password_hash, password):
-            session['user_id'] = user.id
-            session['role'] = role
-            if role == 'government':
-                session['sector'] = user.sector # Store Health/Agri/Security [cite: 35]
+        # if user and check_password_hash(user.password_hash, password):
+            # session['user_id'] = user.id
+            # session['role'] = role
+            # if role == 'government':
+                # session['sector'] = user.sector # Store Health/Agri/Security [cite: 35]
             
-            return redirect(url_for('main.home'))
+            # return redirect(url_for('main.home'))
             
     return render_template("login.html")

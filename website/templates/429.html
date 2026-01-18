@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Slow Down | JanSetu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-stone-50 h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center border border-stone-100 relative overflow-hidden">
+        
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-red-100 rounded-full blur-3xl opacity-50"></div>
+        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-100 rounded-full blur-3xl opacity-50"></div>
+
+        <div class="w-20 h-20 bg-red-50 rounded-full mx-auto flex items-center justify-center mb-6 animate-pulse">
+            <i data-lucide="shield-alert" class="w-10 h-10 text-red-500"></i>
+        </div>
+
+        <h1 class="text-2xl font-bold text-stone-800 mb-2">Security Alert</h1>
+        <p class="text-stone-500 mb-6">
+            Too many login attempts detected from your IP address. 
+            <br>For your security, please wait a moment.
+        </p>
+
+        <div class="bg-stone-100 rounded-xl p-4 mb-6">
+            <span class="text-xs font-bold text-stone-400 uppercase">Cooling Down</span>
+            <div class="text-3xl font-mono font-bold text-stone-800 mt-1" id="timer">01:00</div>
+        </div>
+
+        <a href="/login" class="block w-full bg-stone-900 text-white font-bold py-3 rounded-xl hover:bg-stone-800 transition shadow-lg">
+            Try Again
+        </a>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        // Simple Countdown Timer
+        let seconds = 60;
+        const timerElement = document.getElementById('timer');
+        
+        const interval = setInterval(() => {
+            seconds--;
+            // Format 00:00
+            const display = `00:${seconds < 10 ? '0' : ''}${seconds}`;
+            timerElement.innerText = display;
+            
+            if (seconds <= 0) {
+                clearInterval(interval);
+                timerElement.innerText = "Ready";
+                timerElement.classList.add('text-green-600');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

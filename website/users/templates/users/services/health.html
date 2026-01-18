@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Health Services | JanSetu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-logo {
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        /* Smooth Fade In */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* DNA Animation Background */
+        .dna-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .strand {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s infinite ease-in-out;
+        }
+
+        .strand::before,
+        .strand::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(96, 165, 250, 0.4);
+            box-shadow: 0 0 10px rgba(96, 165, 250, 0.4);
+        }
+
+        .strand::before {
+            top: 0;
+            left: -3px;
+        }
+
+        .strand::after {
+            bottom: 0;
+            left: -3px;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        /* Hover Lift */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-[#f2f0e9] text-stone-800 antialiased selection:bg-blue-100">
+
+    <nav class="fixed top-8 w-full z-50 transition-all duration-300 pointer-events-none">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center pointer-events-auto">
+            <div
+                class="bg-white/60 backdrop-blur-xl border border-white/40 px-5 py-2.5 rounded-full shadow-sm flex items-center gap-2">
+                <span class="font-logo text-2xl font-extrabold text-stone-900 tracking-tight">JAN<span
+                        class="text-amber-600">SETU</span></span>
+                <div class="h-4 w-[1px] bg-stone-300 mx-1"></div>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-blue-600">Health</span>
+            </div>
+            <a href="/citizen/services"
+                class="group relative overflow-hidden bg-stone-900 text-white px-5 py-2.5 rounded-full font-medium text-sm shadow-lg hover:shadow-stone-900/30 transition-all flex items-center gap-2">
+                <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
+                <span class="relative z-10">Back to Services</span>
+                <div
+                    class="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-white/10">
+                </div>
+            </a>
+        </div>
+    </nav>
+
+    <header
+        class="pt-40 pb-20 bg-stone-900 text-white relative overflow-hidden rounded-b-[3rem] shadow-2xl mx-auto max-w-[99%] mt-2">
+        <div class="dna-bg">
+            <div class="strand" style="left: 10%; top: 20%; animation-delay: 0s;"></div>
+            <div class="strand" style="left: 20%; top: 50%; animation-delay: 1s;"></div>
+            <div class="strand" style="left: 80%; top: 30%; animation-delay: 2s;"></div>
+            <div class="strand" style="left: 90%; top: 60%; animation-delay: 3s;"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/50 to-blue-900/20"></div>
+        </div>
+        <div class="max-w-4xl mx-auto px-4 relative z-10 text-center fade-in">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase mb-6 backdrop-blur-md">
+                <i data-lucide="heart-pulse" class="w-4 h-4"></i> Ministry of Health & Family Welfare
+            </div>
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">Health & Wellness</h1>
+            <p class="text-stone-300 text-lg max-w-2xl mx-auto font-light">Access comprehensive medical care, book
+                verified appointments, and manage your digital health records securely.</p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-16 space-y-20">
+
+        <section class="fade-in" style="animation-delay: 0.1s;">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="p-2.5 bg-red-100 rounded-xl"><i data-lucide="phone-call" class="w-6 h-6 text-red-600"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-stone-900">Emergency Hotlines</h2>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div
+                    class="bg-white border border-stone-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
+                    <div
+                        class="absolute right-0 top-0 w-16 h-16 bg-red-50 rounded-bl-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-500">
+                    </div>
+                    <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-1 relative z-10">Ambulance
+                    </p>
+                    <p class="text-3xl font-bold text-red-600 relative z-10">108</p>
+                </div>
+                <div
+                    class="bg-white border border-stone-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
+                    <div
+                        class="absolute right-0 top-0 w-16 h-16 bg-blue-50 rounded-bl-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-500">
+                    </div>
+                    <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-1 relative z-10">Health Line
+                    </p>
+                    <p class="text-3xl font-bold text-blue-600 relative z-10">104</p>
+                </div>
+                <div
+                    class="bg-white border border-stone-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
+                    <div
+                        class="absolute right-0 top-0 w-16 h-16 bg-purple-50 rounded-bl-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-500">
+                    </div>
+                    <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-1 relative z-10">Mental
+                        Health</p>
+                    <p class="text-3xl font-bold text-purple-600 relative z-10">14416</p>
+                </div>
+                <div
+                    class="bg-white border border-stone-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
+                    <div
+                        class="absolute right-0 top-0 w-16 h-16 bg-orange-50 rounded-bl-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-500">
+                    </div>
+                    <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-1 relative z-10">Disaster</p>
+                    <p class="text-3xl font-bold text-orange-600 relative z-10">1070</p>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div
+                    class="bg-gradient-to-br from-red-50 to-white border border-red-100 p-8 rounded-3xl flex items-center justify-between shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div>
+                        <h3 class="text-2xl font-bold text-red-700 mb-2">Request Ambulance</h3>
+                        <p class="text-red-600/70 text-sm font-medium">GPS Enabled • 24/7 Service</p>
+                    </div>
+                    <button
+                        class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-red-200 flex items-center gap-2 group">
+                        <i data-lucide="ambulance" class="w-5 h-5 group-hover:animate-bounce"></i> Call Now
+                    </button>
+                </div>
+                <div
+                    class="bg-white border border-stone-200 p-8 rounded-3xl flex items-center justify-between shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div>
+                        <h3 class="text-2xl font-bold text-stone-800 mb-2">Blood Bank Locator</h3>
+                        <p class="text-stone-500 text-sm font-medium">Find compatible donors nearby</p>
+                    </div>
+                    <button
+                        class="bg-stone-900 hover:bg-stone-800 text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-2 shadow-lg hover:shadow-stone-300 transition-all">
+                        <i data-lucide="map-pin" class="w-5 h-5"></i> Locate
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="fade-in" style="animation-delay: 0.2s;">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="p-2.5 bg-blue-100 rounded-xl"><i data-lucide="calendar-check"
+                        class="w-6 h-6 text-blue-600"></i></div>
+                <h2 class="text-3xl font-bold text-stone-900">Book Appointment</h2>
+            </div>
+            <div class="bg-white p-8 rounded-3xl shadow-lg shadow-stone-200/50 border border-stone-100">
+                <div class="grid md:grid-cols-4 gap-4 mb-10 bg-stone-50 p-2 rounded-2xl border border-stone-200">
+                    <div class="relative group">
+                        <i data-lucide="map-pin"
+                            class="absolute left-4 top-3.5 w-5 h-5 text-stone-400 group-hover:text-blue-500 transition-colors"></i>
+                        <select
+                            class="w-full pl-12 p-3 bg-white rounded-xl border-none font-bold text-stone-700 focus:ring-2 focus:ring-blue-500 shadow-sm appearance-none cursor-pointer">
+                            <option>Ahmedabad</option>
+                            <option>Mumbai</option>
+                            <option>Delhi</option>
+                        </select>
+                    </div>
+                    <div class="relative group">
+                        <i data-lucide="building"
+                            class="absolute left-4 top-3.5 w-5 h-5 text-stone-400 group-hover:text-blue-500 transition-colors"></i>
+                        <input type="text" placeholder="Hospital / Area"
+                            class="w-full pl-12 p-3 bg-white rounded-xl border-none font-bold text-stone-700 focus:ring-2 focus:ring-blue-500 shadow-sm placeholder-stone-400">
+                    </div>
+                    <div class="relative group">
+                        <i data-lucide="activity"
+                            class="absolute left-4 top-3.5 w-5 h-5 text-stone-400 group-hover:text-blue-500 transition-colors"></i>
+                        <select
+                            class="w-full pl-12 p-3 bg-white rounded-xl border-none font-bold text-stone-700 focus:ring-2 focus:ring-blue-500 shadow-sm appearance-none cursor-pointer">
+                            <option>General Physician</option>
+                            <option>Cardiologist</option>
+                            <option>Pediatrician</option>
+                        </select>
+                    </div>
+                    <button
+                        class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl font-bold shadow-md transition-all flex justify-center items-center gap-2 hover:shadow-lg hover:shadow-blue-200">
+                        <i data-lucide="search" class="w-5 h-5"></i> Find Doctor
+                    </button>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="hover-lift border border-stone-100 rounded-2xl p-6 bg-white group relative">
+                        <div
+                            class="absolute top-4 right-4 bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-full">
+                            AVAILABLE</div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="relative">
+                                <img src="https://ui-avatars.com/api/?name=Arun+Mehta&background=eff6ff&color=2563eb"
+                                    class="w-16 h-16 rounded-2xl border-2 border-white shadow-md">
+                                <div
+                                    class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full">
+                                </div>
+                            </div>
+                            <div>
+                                <h4
+                                    class="font-bold text-lg text-stone-900 group-hover:text-blue-600 transition-colors">
+                                    Dr. Arun Mehta</h4>
+                                <p class="text-blue-600 text-xs font-bold uppercase tracking-widest mb-1">Cardiologist
+                                </p>
+                                <p class="text-stone-400 text-xs">12 Yrs Exp • MBBS, MD</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-stone-500 text-sm mb-6 bg-stone-50 p-3 rounded-xl">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-stone-400"></i> Apollo Hospital, City Center
+                        </div>
+                        <button
+                            class="w-full py-3 border border-stone-200 rounded-xl font-bold text-sm text-stone-600 group-hover:bg-stone-900 group-hover:text-white group-hover:border-stone-900 transition-all">Book
+                            Appointment</button>
+                    </div>
+                    <div class="hover-lift border border-stone-100 rounded-2xl p-6 bg-white group relative">
+                        <div
+                            class="absolute top-4 right-4 bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-full">
+                            AVAILABLE</div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="relative">
+                                <img src="https://ui-avatars.com/api/?name=Sarah+Khan&background=fdf2f8&color=db2777"
+                                    class="w-16 h-16 rounded-2xl border-2 border-white shadow-md">
+                                <div
+                                    class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full">
+                                </div>
+                            </div>
+                            <div>
+                                <h4
+                                    class="font-bold text-lg text-stone-900 group-hover:text-blue-600 transition-colors">
+                                    Dr. Sarah Khan</h4>
+                                <p class="text-pink-600 text-xs font-bold uppercase tracking-widest mb-1">Pediatrician
+                                </p>
+                                <p class="text-stone-400 text-xs">8 Yrs Exp • MBBS, DCH</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-stone-500 text-sm mb-6 bg-stone-50 p-3 rounded-xl">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-stone-400"></i> Civil Hospital, Asarwa
+                        </div>
+                        <button
+                            class="w-full py-3 border border-stone-200 rounded-xl font-bold text-sm text-stone-600 group-hover:bg-stone-900 group-hover:text-white group-hover:border-stone-900 transition-all">Book
+                            Appointment</button>
+                    </div>
+                    <div class="hover-lift border border-stone-100 rounded-2xl p-6 bg-white group relative">
+                        <div
+                            class="absolute top-4 right-4 bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-full">
+                            AVAILABLE</div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="relative">
+                                <img src="https://ui-avatars.com/api/?name=Raj+Patel&background=f0fdf4&color=16a34a"
+                                    class="w-16 h-16 rounded-2xl border-2 border-white shadow-md">
+                                <div
+                                    class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full">
+                                </div>
+                            </div>
+                            <div>
+                                <h4
+                                    class="font-bold text-lg text-stone-900 group-hover:text-blue-600 transition-colors">
+                                    Dr. Raj Patel</h4>
+                                <p class="text-green-600 text-xs font-bold uppercase tracking-widest mb-1">Physician</p>
+                                <p class="text-stone-400 text-xs">15 Yrs Exp • MBBS</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-stone-500 text-sm mb-6 bg-stone-50 p-3 rounded-xl">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-stone-400"></i> Sterling Hospital, Drive-in
+                        </div>
+                        <button
+                            class="w-full py-3 border border-stone-200 rounded-xl font-bold text-sm text-stone-600 group-hover:bg-stone-900 group-hover:text-white group-hover:border-stone-900 transition-all">Book
+                            Appointment</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="fade-in" style="animation-delay: 0.3s;">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="p-2.5 bg-teal-100 rounded-xl"><i data-lucide="file-check-2"
+                        class="w-6 h-6 text-teal-700"></i></div>
+                <h2 class="text-3xl font-bold text-stone-900">Government Schemes</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div
+                    class="bg-gradient-to-br from-teal-600 to-teal-900 text-white p-8 rounded-[2rem] relative overflow-hidden shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all duration-500 group">
+                    <div class="relative z-10">
+                        <div
+                            class="inline-block p-2 bg-white/10 rounded-lg mb-4 backdrop-blur-md border border-white/10">
+                            <i data-lucide="shield-plus" class="w-6 h-6 text-teal-200"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-2 font-logo">Ayushman Bharat</h3>
+                        <p class="text-teal-100 text-base mb-8 max-w-sm">Free health coverage up to ₹5 Lakhs per family
+                            per year for secondary and tertiary care hospitalization.</p>
+                        <button
+                            class="bg-white text-teal-900 px-6 py-3 rounded-xl text-sm font-bold hover:bg-teal-50 transition-colors shadow-lg">Check
+                            Eligibility</button>
+                    </div>
+                    <i data-lucide="shield-plus"
+                        class="absolute -bottom-6 -right-6 w-40 h-40 text-white/10 pointer-events-none group-hover:scale-110 transition-transform duration-500"></i>
+                </div>
+                <div
+                    class="bg-gradient-to-br from-blue-600 to-blue-900 text-white p-8 rounded-[2rem] relative overflow-hidden shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all duration-500 group">
+                    <div class="relative z-10">
+                        <div
+                            class="inline-block p-2 bg-white/10 rounded-lg mb-4 backdrop-blur-md border border-white/10">
+                            <i data-lucide="fingerprint" class="w-6 h-6 text-blue-200"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-2 font-logo">ABHA Health ID</h3>
+                        <p class="text-blue-100 text-base mb-8 max-w-sm">Create your digital health ID to securely store
+                            and share prescriptions, reports, and history.</p>
+                        <button
+                            class="bg-white text-blue-900 px-6 py-3 rounded-xl text-sm font-bold hover:bg-blue-50 transition-colors shadow-lg">Create
+                            ID</button>
+                    </div>
+                    <i data-lucide="fingerprint"
+                        class="absolute -bottom-6 -right-6 w-40 h-40 text-white/10 pointer-events-none group-hover:scale-110 transition-transform duration-500"></i>
+                </div>
+            </div>
+        </section>
+
+        <section class="fade-in py-16" style="animation-delay: 0.4s;">
+            <div class="bg-white rounded-[2.5rem] p-10 border border-stone-200 shadow-xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-blue-50 rounded-full blur-3xl -z-10 -mr-20 -mt-20">
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-16 items-start">
+
+                    <div class="relative z-10">
+                        <div
+                            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-bold uppercase mb-6">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> AI Powered
+                        </div>
+                        <h2 class="text-4xl md:text-5xl font-bold text-stone-900 mb-6 font-logo leading-tight">
+                            Understand your <br> <span class="text-blue-600">Medical Reports</span> instantly.
+                        </h2>
+                        <p class="text-lg text-stone-500 mb-10 leading-relaxed">
+                            Confused by complex medical terms? Upload a photo of your lab report, and our AI Doctor will
+                            explain it in simple language with actionable advice.
+                        </p>
+
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-5">
+                                <div
+                                    class="w-12 h-12 rounded-2xl bg-blue-50 flex-shrink-0 flex items-center justify-center text-blue-700 font-bold text-lg border border-blue-100">
+                                    1</div>
+                                <p class="font-medium text-stone-700 text-lg">Take a clear photo of your report.</p>
+                            </div>
+                            <div class="flex items-center gap-5">
+                                <div
+                                    class="w-12 h-12 rounded-2xl bg-blue-50 flex-shrink-0 flex items-center justify-center text-blue-700 font-bold text-lg border border-blue-100">
+                                    2</div>
+                                <p class="font-medium text-stone-700 text-lg">Click "Analyze Now".</p>
+                            </div>
+                            <div class="flex items-center gap-5">
+                                <div
+                                    class="w-12 h-12 rounded-2xl bg-blue-50 flex-shrink-0 flex items-center justify-center text-blue-700 font-bold text-lg border border-blue-100">
+                                    3</div>
+                                <p class="font-medium text-stone-700 text-lg">See simple results & diet advice.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative z-10">
+                        <div class="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-lg border border-stone-100">
+                            <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-stone-900">
+                                <i data-lucide="file-scan" class="text-blue-600"></i> Upload Report
+                            </h3>
+
+                            <div class="w-full h-56 bg-stone-50 rounded-2xl border-2 border-dashed border-stone-300 flex flex-col items-center justify-center mb-6 overflow-hidden relative cursor-pointer hover:bg-stone-100 transition-colors group"
+                                id="dropZone">
+                                <img id="imagePreview"
+                                    class="hidden w-full h-full object-contain absolute inset-0 bg-white z-20">
+                                <div class="text-center z-10 group-hover:scale-105 transition-transform">
+                                    <div
+                                        class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm mx-auto mb-3">
+                                        <i data-lucide="image-plus" class="w-6 h-6 text-blue-500"></i>
+                                    </div>
+                                    <p class="text-sm font-bold text-stone-600">Click to Upload</p>
+                                    <p class="text-xs text-stone-400 mt-1">Supports JPG, PNG</p>
+                                </div>
+                                <input type="file" id="fileInput" accept="image/*"
+                                    class="absolute inset-0 opacity-0 cursor-pointer z-30"
+                                    onchange="previewImage(event)">
+                            </div>
+
+                            <button onclick="analyzeReport()" id="analyzeBtn"
+                                class="w-full bg-stone-900 hover:bg-stone-800 text-white font-bold py-4 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2 text-sm uppercase tracking-wider">
+                                <span>Analyze Now</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+
+                            <div id="resultArea" class="hidden mt-8 border-t border-stone-100 pt-6 animate-pulse">
+                                <h4
+                                    class="text-xs font-bold text-blue-800 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <i data-lucide="stethoscope" class="w-4 h-4"></i> Analysis Result
+                                </h4>
+
+                                <div id="structuredOutput" class="space-y-6">
+                                    <div class="bg-blue-50/50 p-5 rounded-2xl border border-blue-100">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <div>
+                                                <h4
+                                                    class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">
+                                                    Patient</h4>
+                                                <p id="pName" class="text-lg font-bold text-stone-900 font-logo">--</p>
+                                            </div>
+                                            <span
+                                                class="bg-white text-blue-800 text-[10px] font-bold px-2 py-1 rounded border border-blue-100 shadow-sm">AI
+                                                Generated</span>
+                                        </div>
+                                        <div class="w-full h-[1px] bg-blue-100 mb-3"></div>
+                                        <h4 class="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1">
+                                            Summary</h4>
+                                        <p id="pSummary" class="text-sm text-stone-600 leading-relaxed">--</p>
+                                    </div>
+
+                                    <div class="overflow-hidden rounded-xl border border-stone-200 shadow-sm">
+                                        <table class="w-full text-sm text-left">
+                                            <thead
+                                                class="bg-stone-50 text-stone-500 font-bold border-b border-stone-200 text-xs uppercase">
+                                                <tr>
+                                                    <th class="px-4 py-3">Test</th>
+                                                    <th class="px-4 py-3">Value</th>
+                                                    <th class="px-4 py-3">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="resultsTableBody" class="divide-y divide-stone-100 bg-white">
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div
+                                        class="bg-amber-50 p-4 rounded-xl border border-amber-100 text-amber-900 text-xs flex gap-3 leading-relaxed">
+                                        <i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-amber-600 mt-0.5"></i>
+                                        <div>
+                                            <strong class="block mb-1 text-amber-700 uppercase tracking-wide">Medical
+                                                Note</strong>
+                                            <span id="docNote">--</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-4xl mx-auto pt-10 pb-10">
+            <h2 class="text-2xl font-bold text-stone-900 mb-8 text-center">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <details
+                    class="group bg-white p-6 rounded-2xl border border-stone-200 cursor-pointer open:border-blue-500 transition-all shadow-sm hover:shadow-md">
+                    <summary class="flex justify-between items-center font-bold text-stone-800 list-none text-lg">
+                        How do I book an appointment?
+                        <span class="transition-transform group-open:rotate-180 bg-stone-100 p-1 rounded-full"><i
+                                data-lucide="chevron-down" class="w-5 h-5"></i></span>
+                    </summary>
+                    <div class="text-stone-600 mt-4 text-base leading-relaxed pl-1">
+                        Use the "Book an Appointment" section above. Select your City and Specialty, then click Search.
+                        You can view available slots and click "Book Visit" to confirm.
+                    </div>
+                </details>
+                <details
+                    class="group bg-white p-6 rounded-2xl border border-stone-200 cursor-pointer open:border-blue-500 transition-all shadow-sm hover:shadow-md">
+                    <summary class="flex justify-between items-center font-bold text-stone-800 list-none text-lg">
+                        Is the Ayushman Bharat card mandatory?
+                        <span class="transition-transform group-open:rotate-180 bg-stone-100 p-1 rounded-full"><i
+                                data-lucide="chevron-down" class="w-5 h-5"></i></span>
+                    </summary>
+                    <div class="text-stone-600 mt-4 text-base leading-relaxed pl-1">
+                        It is not mandatory for general treatment, but it is required to avail free treatment up to ₹5
+                        Lakhs under the government scheme at empanelled hospitals.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 py-12 text-center text-sm mt-12 rounded-t-[3rem]">
+        <p class="mb-2 tracking-widest uppercase text-xs">National Health Authority (NHA)</p>
+        <p class="text-xs opacity-50">© 2026 JanSetu Health Services.</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // DNA Animation Jitter
+        const strands = document.querySelectorAll('.strand');
+        strands.forEach((strand, index) => {
+            strand.style.animationDelay = `${index * 0.5}s`;
+            strand.style.left = `${Math.random() * 90}%`;
+            strand.style.top = `${Math.random() * 80}%`;
+        });
+
+        // --- AI Analysis Logic ---
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.getElementById('imagePreview');
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function analyzeReport() {
+            const fileInput = document.getElementById('fileInput');
+            const btn = document.getElementById('analyzeBtn');
+            const resultArea = document.getElementById('resultArea');
+
+            if (fileInput.files.length === 0) {
+                alert("Please select a photo first!");
+                return;
+            }
+
+            // Loading State
+            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-4 h-4"></i> Analyzing...`;
+            btn.disabled = true;
+            resultArea.classList.add('hidden');
+            resultArea.classList.remove('animate-pulse'); // Reset animation
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                // Calls the existing Python backend route
+                const response = await fetch('/citizen/services/health/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    alert("Error: " + data.error);
+                    return;
+                }
+
+                let report;
+                try {
+                    report = JSON.parse(data.analysis);
+                } catch (e) {
+                    console.error("JSON Parse Error", e);
+                    alert("The AI response was not in the expected format. Please try again.");
+                    return;
+                }
+
+                // Populate UI
+                document.getElementById('pName').innerText = report.patient_name || "Unknown";
+                document.getElementById('pSummary').innerText = report.summary || "No summary available.";
+                document.getElementById('docNote').innerText = report.doctor_note || "No notes.";
+
+                const tbody = document.getElementById('resultsTableBody');
+                tbody.innerHTML = '';
+
+                if (report.vital_results && report.vital_results.length > 0) {
+                    report.vital_results.forEach(item => {
+                        let badgeClass = "bg-stone-100 text-stone-600";
+                        const status = (item.status || "").toLowerCase();
+
+                        if (status.includes("high")) badgeClass = "bg-red-100 text-red-700";
+                        else if (status.includes("low")) badgeClass = "bg-orange-100 text-orange-700";
+                        else if (status.includes("normal")) badgeClass = "bg-emerald-100 text-emerald-700";
+
+                        const row = `
+                            <tr>
+                                <td class="px-4 py-3 align-top">
+                                    <div class="font-bold text-stone-700">${item.test_name}</div>
+                                    <div class="text-[10px] text-stone-400 mt-0.5 leading-tight">${item.simple_explanation}</div>
+                                </td>
+                                <td class="px-4 py-3 font-mono font-medium text-stone-600 align-top">${item.value}</td>
+                                <td class="px-4 py-3 align-top">
+                                    <span class="inline-block px-2 py-1 rounded text-[10px] font-bold uppercase ${badgeClass}">
+                                        ${item.status}
+                                    </span>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="3" class="px-4 py-3 text-center text-stone-500 text-xs italic">No specific test results found.</td></tr>`;
+                }
+
+                resultArea.classList.remove('hidden');
+                // Scroll to results
+                resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            } catch (error) {
+                console.error("Network Error:", error);
+                alert("Something went wrong connecting to the server.");
+            } finally {
+                btn.innerHTML = `<span>Analyze Now</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,5 +1,284 @@
-{% extends "users/base.html" %}
-{% block content %}
-<h1>Services Page</h1>
-<p>Coming Soon...</p>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Services | JanSetu</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+        rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Smooth Fade In */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-[#f2f0e9] text-stone-800 antialiased selection:bg-amber-200">
+
+    <nav class="fixed w-full z-50 bg-[#faf9f6]/95 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <a href="/citizen/home" class="flex items-center">
+                    <span class="font-logo text-3xl font-extrabold text-stone-900 tracking-tight">
+                        JANSETU
+                    </span>
+                </a>
+
+                <div class="hidden md:flex space-x-8">
+                    <a href="/citizen/home"
+                        class="text-stone-500 hover:text-stone-900 font-medium px-1 py-1 transition-colors">DASHBOARD</a>
+                    <a href="/citizen/services"
+                        class="text-amber-800 font-bold border-b-2 border-amber-700 px-1 py-1">SERVICES</a>
+                    <a href="/citizen/news"
+                        class="text-stone-500 hover:text-stone-900 font-medium px-1 py-1 transition-colors">NOTICES</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div
+                        class="hidden md:flex items-center gap-3 px-3 py-1 bg-white rounded-full border border-stone-200 shadow-sm">
+                        <img src="https://ui-avatars.com/api/?name=Rakesh+Kumar&background=1c1917&color=fff"
+                            class="w-8 h-8 rounded-full border-2 border-amber-100">
+                        <span class="text-xs font-bold text-stone-800">Rakesh Kumar</span>
+                    </div>
+                    <a href="/logout" class="p-2 text-stone-400 hover:text-red-600 transition-colors">
+                        <i data-lucide="power" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="pt-32 pb-16 bg-stone-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+        </div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-amber-600 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20">
+        </div>
+
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Service Directory</h1>
+            <p class="text-stone-400 mb-8 text-lg">Access over 100+ government services from a single portal.</p>
+
+            <div class="relative max-w-2xl mx-auto">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none">
+                    <i data-lucide="search" class="w-6 h-6 text-stone-400"></i>
+                </div>
+                <input type="text" id="serviceSearch"
+                    class="block w-full p-5 pl-14 text-sm text-stone-900 border-0 rounded-2xl bg-white focus:ring-4 focus:ring-amber-500 shadow-xl placeholder-stone-400 font-medium"
+                    placeholder="Search for 'Health', 'Crop Prices', 'Police'..." required>
+                <button type="button"
+                    class="absolute right-2.5 bottom-2.5 bg-stone-900 text-white font-medium rounded-xl text-sm px-6 py-2.5 hover:bg-stone-800 border border-stone-700">
+                    Search
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="flex flex-wrap gap-3 mb-10 justify-center">
+            <button class="px-5 py-2 rounded-full bg-stone-900 text-white text-sm font-bold shadow-md">All</button>
+            <button
+                class="px-5 py-2 rounded-full bg-white border border-stone-200 text-stone-600 text-sm font-bold hover:bg-amber-50 hover:border-amber-200 transition-all">Health</button>
+            <button
+                class="px-5 py-2 rounded-full bg-white border border-stone-200 text-stone-600 text-sm font-bold hover:bg-amber-50 hover:border-amber-200 transition-all">Agriculture</button>
+            <button
+                class="px-5 py-2 rounded-full bg-white border border-stone-200 text-stone-600 text-sm font-bold hover:bg-amber-50 hover:border-amber-200 transition-all">Urban</button>
+        </div>
+
+        <div id="servicesGrid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8">
+
+            <a href="/citizen/services/health"
+                class="service-card group bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="p-4 bg-blue-50 rounded-xl group-hover:bg-blue-600 transition-colors">
+                        <i data-lucide="stethoscope"
+                            class="w-8 h-8 text-blue-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Active</span>
+                </div>
+                <h3 class="text-xl font-bold text-stone-900 mb-2 group-hover:text-blue-700">Health & Wellness</h3>
+                <p class="text-stone-500 text-sm mb-6 leading-relaxed">
+                    Book doctor appointments, view lab reports, access ABHA ID, and locate nearby blood banks.
+                </p>
+                <div class="flex items-center text-sm font-bold text-stone-400 group-hover:text-blue-700 gap-2">
+                    Access Service <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </div>
+            </a>
+
+            <a href="/citizen/services/agriculture"
+                class="service-card group bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="p-4 bg-green-50 rounded-xl group-hover:bg-green-600 transition-colors">
+                        <i data-lucide="wheat"
+                            class="w-8 h-8 text-green-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Active</span>
+                </div>
+                <h3 class="text-xl font-bold text-stone-900 mb-2 group-hover:text-green-700">Agriculture</h3>
+                <p class="text-stone-500 text-sm mb-6 leading-relaxed">
+                    Real-time Mandi prices, soil health cards, PM-KISAN status, and weather advisory for farmers.
+                </p>
+                <div class="flex items-center text-sm font-bold text-stone-400 group-hover:text-green-700 gap-2">
+                    Access Service <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </div>
+            </a>
+
+            <a href="/citizen/services/security"
+                class="service-card group bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="p-4 bg-amber-50 rounded-xl group-hover:bg-amber-600 transition-colors">
+                        <i data-lucide="shield-alert"
+                            class="w-8 h-8 text-amber-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">Active</span>
+                </div>
+                <h3 class="text-xl font-bold text-stone-900 mb-2 group-hover:text-amber-700">Urban Security</h3>
+                <p class="text-stone-500 text-sm mb-6 leading-relaxed">
+                    Report civic issues, access police helplines, track complaints, and view disaster management alerts.
+                </p>
+                <div class="flex items-center text-sm font-bold text-stone-400 group-hover:text-amber-700 gap-2">
+                    Access Service <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </div>
+            </a>
+
+            <a href="#"
+                class="service-card group bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="p-4 bg-purple-50 rounded-xl group-hover:bg-purple-600 transition-colors">
+                        <i data-lucide="graduation-cap"
+                            class="w-8 h-8 text-purple-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="bg-gray-100 text-gray-500 text-xs font-bold px-2 py-1 rounded">Coming Soon</span>
+                </div>
+                <h3 class="text-xl font-bold text-stone-900 mb-2 group-hover:text-purple-700">Education & Skills</h3>
+                <p class="text-stone-500 text-sm mb-6 leading-relaxed">
+                    Scholarships, digital certificates, skill development courses, and university admissions.
+                </p>
+                <div class="flex items-center text-sm font-bold text-stone-400 group-hover:text-purple-700 gap-2">
+                    Access Service <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </div>
+            </a>
+
+            <a href="#"
+                class="service-card group bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="p-4 bg-red-50 rounded-xl group-hover:bg-red-600 transition-colors">
+                        <i data-lucide="bus" class="w-8 h-8 text-red-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="bg-gray-100 text-gray-500 text-xs font-bold px-2 py-1 rounded">Coming Soon</span>
+                </div>
+                <h3 class="text-xl font-bold text-stone-900 mb-2 group-hover:text-red-700">Transport</h3>
+                <p class="text-stone-500 text-sm mb-6 leading-relaxed">
+                    Driving License services, vehicle registration, challan payments, and public transport booking.
+                </p>
+                <div class="flex items-center text-sm font-bold text-stone-400 group-hover:text-red-700 gap-2">
+                    Access Service <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </div>
+            </a>
+
+            <a href="#"
+                class="service-card group bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="p-4 bg-orange-50 rounded-xl group-hover:bg-orange-600 transition-colors">
+                        <i data-lucide="fingerprint"
+                            class="w-8 h-8 text-orange-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <span class="bg-gray-100 text-gray-500 text-xs font-bold px-2 py-1 rounded">Coming Soon</span>
+                </div>
+                <h3 class="text-xl font-bold text-stone-900 mb-2 group-hover:text-orange-700">Identity & Docs</h3>
+                <p class="text-stone-500 text-sm mb-6 leading-relaxed">
+                    Aadhaar updates, PAN card services, Passport tracking, and DigiLocker integration.
+                </p>
+                <div class="flex items-center text-sm font-bold text-stone-400 group-hover:text-orange-700 gap-2">
+                    Access Service <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </div>
+            </a>
+
+        </div>
+
+        <div id="noResults" class="hidden text-center py-20">
+            <div class="inline-flex p-4 bg-stone-100 rounded-full mb-4">
+                <i data-lucide="search-x" class="w-8 h-8 text-stone-400"></i>
+            </div>
+            <h3 class="text-xl font-bold text-stone-600">No Services Found</h3>
+            <p class="text-stone-400">Try searching for 'Health' or 'Agriculture'</p>
+        </div>
+
+    </section>
+
+    <footer class="bg-stone-900 text-stone-400 py-12 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="mb-4 text-sm tracking-widest uppercase">National Digital Public Infrastructure</p>
+            <p class="text-xs opacity-50">© 2026 Government of India. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Search Functionality
+        const searchInput = document.getElementById('serviceSearch');
+        const servicesGrid = document.getElementById('servicesGrid');
+        const cards = document.getElementsByClassName('service-card');
+        const noResults = document.getElementById('noResults');
+
+        searchInput.addEventListener('keyup', function (e) {
+            const term = e.target.value.toLowerCase();
+            let hasResults = false;
+
+            Array.from(cards).forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const desc = card.querySelector('p').textContent.toLowerCase();
+
+                if (title.includes(term) || desc.includes(term)) {
+                    card.style.display = "block";
+                    card.classList.add('fade-in'); // Add animation
+                    hasResults = true;
+                } else {
+                    card.style.display = "none";
+                    card.classList.remove('fade-in');
+                }
+            });
+
+            // Show/Hide "No Results" message
+            if (hasResults) {
+                noResults.classList.add('hidden');
+            } else {
+                noResults.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>

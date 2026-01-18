@@ -1,54 +1,89 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-from config import Config # Import the configuration class from your root directory
+from flask import Flask, render_template, request, redirect, session, url_for
+from users import users_bp
+# 1. IMPORT YOUR DATABASE MODELS
+# (Make sure these import paths match your actual project structure)
+from users.models import db, Citizen, GovEmployee, ServiceProvider 
 
-# Initialize the database globally so it can be accessed by models
-db = SQLAlchemy()
+app = Flask(__name__)
+app.secret_key = 'ingenium_secret_key'
 
-def create_app():
-    app = Flask(_name_)
-    
-    # Apply centralized configurations [cite: 7, 26]
-    app.config.from_object(Config)
+# Database Configuration (Update with your actual DB details)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost/ingenium'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # Initialize the app with the database [cite: 40]
-    db.init_app(app)
+# Initialize DB with this app
+db.init_app(app)
 
-    # 1. Import Blueprints to maintain modular service delivery [cite: 21, 26]
-    from .auth import auth
-    from .agri.routes import agri
-    from .health_care.routes import health_care
-    from .security.routes import security
+app.register_blueprint(users_bp, url_prefix='/citizen')
 
-    # 2. Register Blueprints with appropriate URL prefixes [cite: 26, 27]
-    app.register_blueprint(auth, url_prefix='/')
-    app.register_blueprint(agri, url_prefix='/agri')
-    app.register_blueprint(health_care, url_prefix='/health-care')
-    app.register_blueprint(security, url_prefix='/security')
+# --- UNIVERSAL LANDING PAGE ---
+@app.route('/')
+def universal_home():
+    return render_template('index.html')
 
-    # 3. Import ALL models here so SQLAlchemy detects them for table creation [cite: 44]
-    from .models import Citizens, Govt, ServiceProviders, Scheme
-    from .health_care.models import Hospital, Doctor
-    from .agri.models import AgriCenter
+# --- INTELLIGENT LOGIN ROUTE (Auto-Detects Role) ---
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        # WE REMOVED THE 'ROLE' INPUT. 
+        # NOW WE SEARCH THE TABLES ONE BY ONE.
 
-    with app.app_context():
-        # Automatically creates tables in PostgreSQL if they don't exist [cite: 40, 47]
-        db.create_all()
+        # 1. CHECK CITIZENS TABLE
+        user = Citizen.query.filter_by(email=email).first()
+        if user:
+            # Found in Citizen Table! Validate Password.
+            if user.password_hash == password: # In real app, use check_password_hash()
+                session['user_id'] = user.id
+                session['role'] = 'citizen'
+                return redirect(url_for('users.home'))
+            else:
+                return "Incorrect Password for Citizen account"
 
-    # 4. Setup Login Manager for secure session handling [cite: 8]
-    login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
-    login_manager.init_app(app)
+        # 2. CHECK GOV EMPLOYEES TABLE (If not found in Citizens)
+        user = GovEmployee.query.filter_by(email=email).first()
+        if user:
+            if user.password_hash == password:
+                session['user_id'] = user.id
+                session['role'] = 'admin'
+                session['sector'] = user.sector # Save sector (Health/Agri) to session
+                return redirect(url_for('admin_dashboard'))
+            else:
+                return "Incorrect Password for Government account"
 
-    @login_manager.user_loader
-    def load_user(id):
-        # Multi-table check to support diverse user types: Citizens, Govt, and Providers [cite: 41, 48, 49]
-        user = Citizens.query.get(int(id))
-        if not user:
-            user = Govt.query.get(int(id))
-        if not user:
-            user = ServiceProviders.query.get(int(id))
-        return user
+        # 3. CHECK SERVICE PROVIDERS TABLE (If not found in Gov)
+        user = ServiceProvider.query.filter_by(email=email).first()
+        if user:
+            if user.password_hash == password:
+                session['user_id'] = user.id
+                session['role'] = 'provider'
+                return redirect(url_for('kanban_board'))
+            else:
+                return "Incorrect Password for Service Provider account"
 
-    return app
+        # 4. IF EMAIL NOT FOUND IN ANY TABLE
+        return "Account not found. Please Sign Up if you are a Citizen."
+
+    return render_template('login.html')
+
+# --- PLACEHOLDER DASHBOARDS ---
+@app.route('/admin')
+def admin_dashboard():
+    # Security check
+    if session.get('role') != 'admin': return redirect(url_for('login'))
+    return f"<h1>Government Dashboard: {session.get('sector')} Sector</h1>"
+
+@app.route('/provider')
+def kanban_board():
+    if session.get('role') != 'provider': return redirect(url_for('login'))
+    return "<h1>Service Provider Kanban Board</h1>"
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('universal_home'))
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
