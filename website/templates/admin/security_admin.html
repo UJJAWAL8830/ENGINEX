@@ -2,210 +2,225 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security Ops | JanSetu</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@700&display=swap" rel="stylesheet">
+    
     <script src="https://unpkg.com/lucide@latest"></script>
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
         body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, .brand-font { font-family: 'Playfair Display', serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        .font-logo { font-family: 'Outfit', sans-serif; letter-spacing: -0.02em; }
         
-        /* Glassmorphism */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .glass-panel {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
         }
 
-        /* News Ticker Animation */
-        .ticker-wrap {
-            width: 100%; overflow: hidden; background-color: #fee2e2; /* Red tint */ padding-left: 100%; box-sizing: border-box;
+        /* Radar Scan Animation Background */
+        .radar-bg {
+            position: absolute; inset: 0; pointer-events: none; opacity: 0.15;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.1) 0%, transparent 60%),
+                linear-gradient(0deg, transparent 49%, rgba(220, 38, 38, 0.1) 50%, transparent 51%),
+                linear-gradient(90deg, transparent 49%, rgba(220, 38, 38, 0.1) 50%, transparent 51%);
+            background-size: 100% 100%, 60px 60px, 60px 60px;
         }
-        .ticker {
-            display: inline-block; white-space: nowrap; padding-right: 100%; box-sizing: border-box; animation: ticker 30s linear infinite;
+        .radar-sweep {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+            background: conic-gradient(from 0deg at 50% 50%, transparent 0%, rgba(220, 38, 38, 0.1) 15%, transparent 20%);
+            animation: radarSpin 4s linear infinite;
+            border-radius: 50%;
         }
-        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+        @keyframes radarSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* Blink Animation for Live Indicators */
         .blink { animation: blinker 1.5s linear infinite; }
         @keyframes blinker { 50% { opacity: 0; } }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 10px; }
+        .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -10px rgba(220, 38, 38, 0.15); }
+        
+        /* Custom Scrollbar for Alert Feed */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-[#f2f0e9] text-stone-800 antialiased selection:bg-red-200">
+<body class="bg-[#f2f0e9] text-stone-800 antialiased selection:bg-red-100">
 
-    <div class="fixed top-0 z-[60] w-full h-8 bg-red-100 border-b border-red-200 flex items-center text-xs font-bold text-red-900">
-        <div class="px-4 bg-red-200 h-full flex items-center z-10 shadow-sm">OPS STATUS:</div>
-        <div class="ticker-wrap h-full flex items-center">
-            <div class="ticker">
-                NATIONAL THREAT LEVEL: ELEVATED • Sector 4 Grid Power Failure • Riot Control Unit Deployed in Zone B • Cyclone Warning issued for Coastal Belt • Critical Infra: SECURE.
+    <nav class="fixed top-6 w-full z-50 transition-all duration-300 pointer-events-none">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center pointer-events-auto">
+            
+            <div class="bg-white/70 backdrop-blur-xl border border-white/50 px-5 py-2.5 rounded-full shadow-sm flex items-center gap-3">
+                <span class="font-logo text-2xl font-extrabold text-stone-900 tracking-tight">JAN<span class="text-red-700">SETU</span></span>
+                <div class="h-4 w-[1px] bg-stone-300"></div>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500">Security Admin</span>
             </div>
-        </div>
-    </div>
 
-    <nav class="fixed top-8 w-full z-50 bg-[#faf9f6]/95 backdrop-blur-md border-b border-stone-200 shadow-sm transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <a href="#" class="flex items-center">
-                    <span class="font-logo text-3xl font-extrabold text-stone-900 tracking-tight">
-                        JAN<span class="text-red-700">SETU</span> <span class="text-blue-600 text-sm font-medium ml-2 uppercase tracking-widest">Security Admin</span>
-                    </span>
-                </a>
-
-                <div class="flex items-center gap-4">
-                    <div class="hidden md:flex items-center gap-3 px-3 py-1 bg-white rounded-full border border-stone-200 shadow-sm">
-                        <img src="https://ui-avatars.com/api/?name=IG+Kumar&background=1c1917&color=fff" class="w-8 h-8 rounded-full border-2 border-red-100">
-                        <div class="flex flex-col">
-                            <span class="text-xs font-bold text-stone-800 leading-none">IG P. Kumar</span>
-                            <span class="text-[10px] text-red-600 font-bold leading-none">● Commander</span>
-                        </div>
+            <div class="flex items-center gap-3">
+                <div class="hidden md:flex items-center gap-3 px-4 py-1.5 bg-white/70 backdrop-blur-xl rounded-full border border-white/50 shadow-sm">
+                    <img src="https://ui-avatars.com/api/?name=IG+Kumar&background=1c1917&color=fff" class="w-8 h-8 rounded-full border-2 border-red-100">
+                    <div class="flex flex-col pr-2">
+                        <span class="text-xs font-bold text-stone-800 leading-none">IG P. Kumar</span>
+                        <span class="text-[10px] text-red-600 font-bold leading-none">● Commander</span>
                     </div>
-                    <a href="/logout" class="p-2 text-stone-400 hover:text-red-600 transition-colors">
-                        <i data-lucide="power" class="w-5 h-5"></i>
-                    </a>
                 </div>
+                <a href="/logout" class="p-2.5 bg-white/70 backdrop-blur-xl rounded-full text-stone-500 hover:text-red-600 hover:bg-red-50 transition-all shadow-sm border border-white/50 group">
+                    <i data-lucide="power" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                </a>
             </div>
+
         </div>
     </nav>
 
-    <section class="relative w-full pt-32 pb-32 overflow-hidden bg-stone-900">
-        <img src="https://images.unsplash.com/photo-1543357480-c60d40007a3f?q=80&w=2070&auto=format&fit=crop" 
-             class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-luminosity">
-        <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/60 to-transparent"></div>
+    <header class="pt-32 pb-24 bg-stone-900 text-white relative overflow-hidden rounded-b-[3rem] shadow-2xl mx-auto max-w-[99%] mt-2">
+        
+        <div class="radar-bg"></div>
+        <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
+            <div class="w-[100vw] h-[100vw] max-w-[800px] max-h-[800px] radar-sweep"></div>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/80 to-red-900/20"></div>
 
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-end pb-12">
-            <div class="max-w-2xl mb-8 md:mb-0">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600 border border-red-500 text-white text-xs font-bold uppercase mb-4 shadow-lg shadow-red-900/50">
-                    <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> Live: Elevated Threat
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-end pb-4">
+            <div class="max-w-2xl mb-8 md:mb-0 fade-in-up">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600/20 border border-red-500/30 text-red-300 text-xs font-bold uppercase mb-4 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> 
+                    Threat Level: Elevated
                 </div>
                 <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
-                    National Security <br> & Safety Command
+                    National Security <br> Operations Center
                 </h1>
                 <p class="text-stone-300 text-lg font-light max-w-lg">
-                    Real-time incident tracking, emergency response coordination, and disaster management.
+                    Real-time incident tracking, emergency response coordination, and tactical resource deployment.
                 </p>
             </div>
             
-            <div class="text-right text-stone-400">
-                <p class="text-3xl font-bold text-white" id="clock">00:00:00</p>
-                <p class="text-sm font-medium text-amber-500">Code Orange: Active</p>
-                <p class="text-xs mt-1 text-stone-500">Lat: 23.0225° N • Long: 72.5714° E</p>
+            <div class="text-right text-stone-400 fade-in-up" style="animation-delay: 0.2s;">
+                <p class="text-4xl font-bold text-white tracking-tight" id="clock">00:00:00</p>
+                <p class="text-sm font-medium mt-1 text-amber-500">Code Orange Active</p>
+                <div class="flex justify-end gap-2 mt-2 text-[10px] uppercase font-bold tracking-wider text-red-400">
+                    <span><i data-lucide="shield" class="w-3 h-3 inline"></i> Secure</span>
+                    <span><i data-lucide="satellite" class="w-3 h-3 inline"></i> Uplink OK</span>
+                </div>
             </div>
         </div>
-    </section>
+    </header>
 
-    <section class="relative z-20 -mt-20 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="glass-panel rounded-2xl shadow-xl p-6 grid grid-cols-1 md:grid-cols-5 gap-6 divide-y md:divide-y-0 md:divide-x divide-stone-200">
-                
-                <div class="flex items-center gap-4 px-4">
-                    <div class="w-12 h-12 rounded-full bg-stone-800 flex items-center justify-center border border-stone-600 shadow-inner">
-                        <i data-lucide="shield-alert" class="h-6 w-6 text-amber-500"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Threat Level</p>
-                        <h3 class="text-xl font-bold text-amber-600">ELEVATED</h3>
-                        <p class="text-[10px] font-medium text-stone-500">DefCon 3</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-4 px-4">
-                    <div class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center border border-red-100">
-                        <i data-lucide="alert-triangle" class="h-6 w-6 text-red-600 animate-pulse"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Active Incidents</p>
-                        <h3 class="text-2xl font-bold text-stone-800">42</h3>
-                        <p class="text-xs font-bold text-red-600">3 Critical</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-4 px-4">
-                    <div class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center border border-green-100">
-                        <i data-lucide="timer" class="h-6 w-6 text-green-700"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Avg Response</p>
-                        <h3 class="text-2xl font-bold text-stone-800">08:12</h3>
-                        <p class="text-xs font-bold text-green-600">↓ 12s Improved</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-4 px-4">
-                    <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
-                        <i data-lucide="phone-call" class="h-6 w-6 text-blue-700"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Calls Handled</p>
-                        <h3 class="text-2xl font-bold text-stone-800">1,204</h3>
-                        <p class="text-xs font-medium text-stone-500">Since 00:00</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-4 px-4">
-                    <div class="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center border border-purple-100">
-                        <i data-lucide="server" class="h-6 w-6 text-purple-700"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Critical Infra</p>
-                        <h3 class="text-xl font-bold text-green-700">SECURE</h3>
-                        <p class="text-[10px] font-medium text-stone-500">Power & Water Grid</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <main class="relative z-20 -mt-16 px-4 sm:px-6 lg:px-8 pb-12 max-w-7xl mx-auto space-y-8">
+        
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 fade-in-up" style="animation-delay: 0.1s;">
             
-            <div class="lg:col-span-2 bg-white p-2 rounded-2xl border border-stone-200 shadow-sm h-[500px] relative z-0">
-                <div id="securityMap" class="h-full w-full rounded-xl z-0"></div>
-                
-                <div class="absolute bottom-6 left-6 bg-white/90 backdrop-blur p-3 rounded-lg shadow-lg z-[400] text-xs border border-stone-200">
-                    <div class="flex items-center gap-2 mb-1"><span class="w-3 h-3 rounded-full bg-blue-600 border border-white shadow"></span> Police Station</div>
-                    <div class="flex items-center gap-2 mb-1"><span class="w-3 h-3 rounded-full bg-amber-500 border border-white shadow"></span> Fire Station</div>
-                    <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-red-600 border border-white shadow animate-pulse"></span> Active Incident</div>
+            <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 hover-lift">
+                <div class="w-12 h-12 rounded-xl bg-stone-800 flex items-center justify-center text-amber-500 shadow-inner">
+                    <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Threat Level</p>
+                    <h3 class="text-xl font-bold text-amber-600">ELEVATED</h3>
+                    <p class="text-[10px] font-bold text-stone-500">DefCon 3</p>
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden h-[500px] flex flex-col">
+            <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 hover-lift">
+                <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-600 shadow-inner">
+                    <i data-lucide="alert-triangle" class="w-6 h-6 animate-pulse"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Incidents</p>
+                    <h3 class="text-2xl font-bold text-stone-800">42</h3>
+                    <p class="text-[10px] font-bold text-red-600">3 Critical</p>
+                </div>
+            </div>
+
+            <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 hover-lift">
+                <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-green-700 shadow-inner">
+                    <i data-lucide="timer" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Response</p>
+                    <h3 class="text-2xl font-bold text-stone-800">08:12</h3>
+                    <p class="text-[10px] font-bold text-green-600">↓ 12s Improved</p>
+                </div>
+            </div>
+
+            <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 hover-lift">
+                <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-700 shadow-inner">
+                    <i data-lucide="phone-call" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Calls</p>
+                    <h3 class="text-2xl font-bold text-stone-800">1,204</h3>
+                    <p class="text-[10px] font-bold text-stone-500">Since 00:00</p>
+                </div>
+            </div>
+
+            <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 hover-lift">
+                <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-700 shadow-inner">
+                    <i data-lucide="server" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Infra Status</p>
+                    <h3 class="text-xl font-bold text-green-700">SECURE</h3>
+                    <p class="text-[10px] font-bold text-stone-500">Power Grid</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in-up" style="animation-delay: 0.2s;">
+            
+            <div class="lg:col-span-2 bg-white p-2 rounded-3xl border border-stone-200 shadow-sm h-[550px] relative z-0 group">
+                <div id="securityMap" class="h-full w-full rounded-2xl z-0"></div>
+                
+                <div class="absolute bottom-6 left-6 bg-white/90 backdrop-blur-md p-3 rounded-xl shadow-lg z-[400] text-xs border border-stone-200 flex gap-4">
+                    <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-blue-600 border border-white"></span> Police</div>
+                    <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 border border-white"></span> Fire</div>
+                    <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-red-600 border border-white animate-pulse"></span> Incident</div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-stone-200 shadow-sm overflow-hidden h-[550px] flex flex-col">
                 <div class="px-6 py-4 border-b border-stone-100 bg-stone-50/50 flex justify-between items-center">
-                    <h3 class="text-lg font-bold text-stone-800 brand-font">Incoming Alerts Feed</h3>
+                    <h3 class="text-sm font-bold text-stone-700 uppercase tracking-widest">Incoming Alerts</h3>
                     <span class="flex items-center gap-1.5 text-[10px] font-bold text-red-600 bg-red-50 px-2 py-1 rounded border border-red-100">
                         <span class="w-1.5 h-1.5 bg-red-600 rounded-full blink"></span> LIVE
                     </span>
                 </div>
                 
-                <div class="flex-1 overflow-y-auto p-4 space-y-4">
-                    <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-r-xl shadow-sm">
+                <div class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                    
+                    <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-r-xl shadow-sm hover:bg-red-100/50 transition cursor-pointer">
                         <div class="flex justify-between mb-2">
-                            <span class="text-[10px] font-bold text-white bg-red-600 px-2 py-0.5 rounded uppercase tracking-wide">SOS Signal</span>
+                            <span class="text-[10px] font-bold text-white bg-red-600 px-2 py-0.5 rounded uppercase tracking-wide shadow-sm">SOS Signal</span>
                             <span class="text-[10px] text-stone-500 font-bold">Just now</span>
                         </div>
                         <p class="text-sm font-bold text-stone-900">Loc: Sector 12, Main Road</p>
-                        <p class="text-xs text-stone-500 font-mono mt-1">GPS: 23.022, 72.571</p>
-                        <div class="mt-3 flex gap-2">
-                            <button class="text-[10px] bg-stone-900 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-stone-700 shadow-sm w-full">Dispatch Unit</button>
-                            <button class="text-[10px] bg-white border border-stone-300 text-stone-600 px-3 py-1.5 rounded-lg font-bold w-full">View Cam</button>
+                        <p class="text-xs text-stone-500 font-mono mt-1 mb-3">GPS: 23.022, 72.571</p>
+                        <div class="flex gap-2">
+                            <button class="text-[10px] bg-stone-900 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-stone-700 shadow-sm flex-1">Dispatch</button>
+                            <button class="text-[10px] bg-white border border-stone-300 text-stone-600 px-3 py-1.5 rounded-lg font-bold flex-1 hover:bg-stone-50">Cam Feed</button>
                         </div>
                     </div>
 
-                    <div class="p-4 bg-white border border-stone-200 rounded-xl shadow-sm">
+                    <div class="p-4 bg-white border border-stone-200 rounded-xl shadow-sm hover:border-amber-300 transition">
                         <div class="flex justify-between mb-2">
                             <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded uppercase tracking-wide">Fire Report</span>
                             <span class="text-[10px] text-stone-500 font-bold">5m ago</span>
@@ -216,141 +231,67 @@
                         </p>
                     </div>
 
-                    <div class="p-4 bg-white border border-stone-200 rounded-xl shadow-sm opacity-70">
+                    <div class="p-4 bg-white border border-stone-200 rounded-xl shadow-sm opacity-75 hover:opacity-100 transition">
                         <div class="flex justify-between mb-2">
-                            <span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded uppercase tracking-wide">Patrol Check</span>
+                            <span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded uppercase tracking-wide">Patrol</span>
                             <span class="text-[10px] text-stone-500 font-bold">12m ago</span>
                         </div>
                         <p class="text-sm font-bold text-stone-900">Riverfront Area</p>
-                        <p class="text-xs text-stone-500 mt-1">Routine surveillance completed.</p>
+                        <p class="text-xs text-stone-500 mt-1">Routine surveillance log.</p>
                     </div>
+
                 </div>
             </div>
         </div>
-    </section>
 
-    <section class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold text-stone-900 brand-font mb-6">Tactical Analysis</h2>
-        
-        <div class="grid lg:grid-cols-3 gap-8">
-            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
-                <h3 class="text-sm font-bold text-stone-500 uppercase mb-4">Incident Distribution</h3>
-                <div class="h-48">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in-up" style="animation-delay: 0.3s;">
+            
+            <div class="bg-white p-6 rounded-3xl border border-stone-200 shadow-sm hover:shadow-lg transition-all">
+                <h3 class="text-sm font-bold text-stone-500 uppercase mb-4 tracking-wider">Incident Breakdown</h3>
+                <div class="h-48 flex justify-center">
                     <canvas id="incidentChart"></canvas>
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
-                <h3 class="text-sm font-bold text-stone-500 uppercase mb-4">Response Time Trend</h3>
+            <div class="bg-white p-6 rounded-3xl border border-stone-200 shadow-sm hover:shadow-lg transition-all">
+                <h3 class="text-sm font-bold text-stone-500 uppercase mb-4 tracking-wider">Response Time</h3>
                 <div class="h-48">
                     <canvas id="responseChart"></canvas>
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
-                <h3 class="text-sm font-bold text-stone-500 uppercase mb-4">Active Units Status</h3>
-                <div class="overflow-y-auto h-48">
-                    <table class="w-full text-left text-xs">
-                        <thead class="text-stone-400 font-bold border-b border-stone-100">
-                            <tr>
-                                <th class="pb-2">Unit ID</th>
-                                <th class="pb-2">Zone</th>
-                                <th class="pb-2">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-stone-100 font-medium text-stone-700">
-                            <tr>
-                                <td class="py-2">PCR-01</td>
-                                <td>North</td>
-                                <td class="text-green-600">Patrolling</td>
-                            </tr>
-                            <tr>
-                                <td class="py-2">PCR-04</td>
-                                <td>West</td>
-                                <td class="text-red-600">Responding</td>
-                            </tr>
-                            <tr>
-                                <td class="py-2">FIRE-02</td>
-                                <td>Ind. Area</td>
-                                <td class="text-amber-600">On Site</td>
-                            </tr>
-                            <tr>
-                                <td class="py-2">AMB-11</td>
-                                <td>South</td>
-                                <td class="text-green-600">Available</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-12 bg-stone-900 text-stone-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-2xl font-bold text-white brand-font mb-8">Command Actions</h2>
-            
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition cursor-pointer group">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div class="p-3 bg-blue-500/20 text-blue-400 rounded-xl group-hover:text-blue-300"><i data-lucide="phone" class="w-6 h-6"></i></div>
-                        <div>
-                            <h4 class="font-bold text-white text-lg">Update Helplines</h4>
-                            <p class="text-xs text-stone-400">Manage 100/101 routing</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition cursor-pointer group">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div class="p-3 bg-amber-500/20 text-amber-400 rounded-xl group-hover:text-amber-300"><i data-lucide="map" class="w-6 h-6"></i></div>
-                        <div>
-                            <h4 class="font-bold text-white text-lg">Deploy Units</h4>
-                            <p class="text-xs text-stone-400">Assign to active zones</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition cursor-pointer group">
-                    <div class="flex items-center gap-4 mb-3">
-                        <div class="p-3 bg-stone-500/20 text-stone-400 rounded-xl group-hover:text-stone-300"><i data-lucide="file-text" class="w-6 h-6"></i></div>
-                        <div>
-                            <h4 class="font-bold text-white text-lg">Download Logs</h4>
-                            <p class="text-xs text-stone-400">Daily Incident Report</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-8 grid md:grid-cols-2 gap-6">
-                <div class="bg-red-900/20 border border-red-900/50 p-4 rounded-xl flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="siren" class="text-red-500 w-5 h-5"></i>
-                        <span class="text-sm font-bold text-red-200">Critical Situation? Escalate to National Grid</span>
-                    </div>
-                    <button class="bg-red-700 hover:bg-red-600 text-white text-xs font-bold px-4 py-2 rounded-lg transition">Escalate Now</button>
-                </div>
-                <div class="bg-stone-800 border border-stone-700 p-4 rounded-xl flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="settings" class="text-stone-400 w-5 h-5"></i>
-                        <span class="text-sm font-bold text-stone-300">System Issues? Contact Technical Support</span>
-                    </div>
-                    <button class="bg-stone-700 hover:bg-stone-600 text-white text-xs font-bold px-4 py-2 rounded-lg transition">Contact IT</button>
+            <div class="bg-stone-900 p-6 rounded-3xl shadow-xl flex flex-col relative overflow-hidden">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+                
+                <h3 class="text-sm font-bold text-stone-400 uppercase mb-6 tracking-widest relative z-10">Command Actions</h3>
+                
+                <div class="grid grid-cols-2 gap-3 flex-1 relative z-10">
+                    <button class="bg-white/10 hover:bg-white/20 border border-white/5 text-white p-3 rounded-xl text-center transition flex flex-col items-center justify-center gap-2 group">
+                        <i data-lucide="radio" class="w-5 h-5 text-red-400 group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold">Broadcast Alert</span>
+                    </button>
+                    <button class="bg-white/10 hover:bg-white/20 border border-white/5 text-white p-3 rounded-xl text-center transition flex flex-col items-center justify-center gap-2 group">
+                        <i data-lucide="map" class="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold">Deploy Units</span>
+                    </button>
+                    <button class="bg-white/10 hover:bg-white/20 border border-white/5 text-white p-3 rounded-xl text-center transition flex flex-col items-center justify-center gap-2 group">
+                        <i data-lucide="phone" class="w-5 h-5 text-blue-400 group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold">Helplines</span>
+                    </button>
+                    <button class="bg-white/10 hover:bg-white/20 border border-white/5 text-white p-3 rounded-xl text-center transition flex flex-col items-center justify-center gap-2 group">
+                        <i data-lucide="file-text" class="w-5 h-5 text-stone-400 group-hover:scale-110 transition-transform"></i>
+                        <span class="text-xs font-bold">Daily Logs</span>
+                    </button>
                 </div>
             </div>
 
         </div>
-    </section>
 
-    <footer class="bg-stone-900 text-stone-500 py-12 border-t border-stone-800">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="flex items-center justify-center gap-2 mb-6">
-                <i data-lucide="building-2" class="h-6 w-6 text-red-700"></i>
-                <span class="font-bold text-xl text-white">JAN<span class="text-red-700">SETU</span></span>
-            </div>
-            <p class="mb-4 text-sm max-w-md mx-auto">Security Operations Center - Restricted Access Only.</p>
-            <p class="text-xs opacity-50">© 2026 Government of India. All rights reserved.</p>
-        </div>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 py-12 text-center text-sm mt-12 rounded-t-[3rem]">
+        <p class="mb-2 tracking-widest uppercase text-xs text-red-500 font-bold">Restricted Access Only</p>
+        <p class="text-xs opacity-50">© 2026 Government of India. All rights reserved.</p>
     </footer>
 
     <script>
@@ -363,32 +304,29 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // 2. Leaflet Map Configuration
-        // Initializing map focused on Ahmedabad (as per previous context)
-        const map = L.map('securityMap', {
-            zoomControl: false, // Move zoom control if needed
-            attributionControl: false
-        }).setView([23.0225, 72.5714], 13);
+        // 2. Leaflet Map
+        const map = L.map('securityMap', { zoomControl: false }).setView([23.0225, 72.5714], 13);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
 
-        // Using CartoDB Light basemap for the "Beige/Clean" look
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            maxZoom: 19
-        }).addTo(map);
-
-        // Custom Circle Markers for aesthetics
-        // Police Station (Blue)
-        L.circleMarker([23.025, 72.58], { color: '#2563eb', fillColor: '#2563eb', fillOpacity: 0.5, radius: 8 }).addTo(map).bindPopup("Police Station HQ");
-        L.circleMarker([23.01, 72.55], { color: '#2563eb', fillColor: '#2563eb', fillOpacity: 0.5, radius: 8 }).addTo(map).bindPopup("West Zone Police");
-
-        // Fire Station (Amber)
-        L.circleMarker([23.03, 72.56], { color: '#d97706', fillColor: '#d97706', fillOpacity: 0.5, radius: 8 }).addTo(map).bindPopup("Fire Station 1");
-
-        // Active Incident (Red Pulse effect simulated with a larger transparent circle)
+        // Map Markers
+        L.circleMarker([23.025, 72.58], { color: '#2563eb', fillColor: '#2563eb', fillOpacity: 0.5, radius: 6 }).addTo(map).bindPopup("Police HQ");
+        L.circleMarker([23.03, 72.56], { color: '#d97706', fillColor: '#d97706', fillOpacity: 0.5, radius: 6 }).addTo(map).bindPopup("Fire Station");
+        
+        // Incident Pulse
         var incidentLoc = [23.022, 72.571];
-        L.circleMarker(incidentLoc, { color: '#dc2626', fillColor: '#dc2626', fillOpacity: 0.8, radius: 10 }).addTo(map).bindPopup("<b>SOS SIGNAL</b><br>Sector 12");
-        L.circleMarker(incidentLoc, { color: '#dc2626', fillColor: '#dc2626', fillOpacity: 0.2, radius: 20 }).addTo(map); // Pulse effect ring
+        L.circleMarker(incidentLoc, { color: '#dc2626', fillColor: '#dc2626', fillOpacity: 0.8, radius: 8 }).addTo(map).bindPopup("<b>SOS SIGNAL</b>");
+        var pulse = L.circleMarker(incidentLoc, { color: '#dc2626', fillColor: '#dc2626', fillOpacity: 0.2, radius: 20 }).addTo(map);
+        
+        // Simple pulse animation for map marker
+        let growing = true;
+        setInterval(() => {
+            let r = pulse.getRadius();
+            if(growing) { r += 1; if(r > 25) growing = false; }
+            else { r -= 1; if(r < 15) growing = true; }
+            pulse.setRadius(r);
+        }, 100);
 
-        // 3. Charts (Chart.js)
+        // 3. Charts
         const incidentCtx = document.getElementById('incidentChart').getContext('2d');
         new Chart(incidentCtx, {
             type: 'doughnut',
@@ -397,30 +335,30 @@
                 datasets: [{
                     data: [15, 5, 12, 10],
                     backgroundColor: ['#f59e0b', '#ef4444', '#3b82f6', '#78716c'],
-                    borderWidth: 0
+                    borderWidth: 0,
+                    hoverOffset: 5
                 }]
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { usePointStyle: true, boxWidth: 6, font: {size: 10} } } } }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { usePointStyle: true, boxWidth: 6, font: {size: 10} } } }, cutout: '70%' }
         });
 
         const responseCtx = document.getElementById('responseChart').getContext('2d');
         new Chart(responseCtx, {
             type: 'line',
             data: {
-                labels: ['00:00', '04:00', '08:00', '12:00', '16:00'],
+                labels: ['00:00', '04:00', '08:00', '12:00'],
                 datasets: [{
-                    label: 'Response Time (mins)',
-                    data: [12, 10, 8, 9, 8],
+                    label: 'Mins',
+                    data: [12, 10, 8, 9],
                     borderColor: '#16a34a',
                     backgroundColor: 'rgba(22, 163, 74, 0.1)',
                     fill: true,
                     tension: 0.4,
-                    pointRadius: 0
+                    pointRadius: 3
                 }]
             },
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
         });
-
     </script>
 </body>
 </html>
