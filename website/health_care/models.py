@@ -1,5 +1,6 @@
 from .. import db # Import the db instance from the website folder
 from datetime import datetime
+from sqlalchemy.sql import func
 
 class Hospital(db.Model):
     __tablename__ = 'hospitals'
@@ -23,3 +24,4 @@ class Doctor(db.Model):
     # you can store city/state here if you want independent records
     city = db.Column(db.String(100), nullable=False)
     state = db.Column(db.String(100), nullable=False)
+

@@ -1,49 +1,59 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from config import Config # Import the configuration class from your root directory
+from config import Config 
 
-# Initialize the database globally so it can be accessed by models
 db = SQLAlchemy()
 
 def create_app():
-    app = Flask(_name_)
+# <<<<<<< Database
+#     app = Flask(__name__)
+# =======
+#     app = Flask(_name_)
     
-    # Apply centralized configurations [cite: 7, 26]
-    app.config.from_object(Config)
+#     # Apply centralized configurations [cite: 7, 26]
+# >>>>>>> main
+#     app.config.from_object(Config)
 
-    # Initialize the app with the database [cite: 40]
     db.init_app(app)
 
-    # 1. Import Blueprints to maintain modular service delivery [cite: 21, 26]
+    # 1. Import Blueprints
+    from .agri import agri
+    from .health_care import health_care
+    from .security import security
     from .auth import auth
-    from .agri.routes import agri
-    from .health_care.routes import health_care
-    from .security.routes import security
+    from .routes import routes
 
-    # 2. Register Blueprints with appropriate URL prefixes [cite: 26, 27]
-    app.register_blueprint(auth, url_prefix='/')
+    # 2. Register Blueprints with specific prefixes
+    # Citizen-specific dashboard and services
+    app.register_blueprint(routes, url_prefix='/') 
+    
+    # Authentication routes (login, signup, logout)
+    app.register_blueprint(auth, url_prefix='/auth')
+    
+    # Departmental portals
     app.register_blueprint(agri, url_prefix='/agri')
-    app.register_blueprint(health_care, url_prefix='/health-care')
+
+    app.register_blueprint(health_care, url_prefix='/health_care')
+
     app.register_blueprint(security, url_prefix='/security')
 
-    # 3. Import ALL models here so SQLAlchemy detects them for table creation [cite: 44]
+    # 3. Model Registration for db.create_all()
     from .models import Citizens, Govt, ServiceProviders, Scheme
     from .health_care.models import Hospital, Doctor
-    from .agri.models import AgriCenter
+    from .agri.models import AgriCenter, AgriComplaint # Added your new complaint table
 
     with app.app_context():
-        # Automatically creates tables in PostgreSQL if they don't exist [cite: 40, 47]
         db.create_all()
 
-    # 4. Setup Login Manager for secure session handling [cite: 8]
+    # 4. Setup Login Manager for secure session handling
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
     @login_manager.user_loader
     def load_user(id):
-        # Multi-table check to support diverse user types: Citizens, Govt, and Providers [cite: 41, 48, 49]
+        # Multi-table check to support diverse user types: Citizens, Govt, and Providers
         user = Citizens.query.get(int(id))
         if not user:
             user = Govt.query.get(int(id))
