@@ -8,7 +8,7 @@
 
 ---
 
-![JanSetu Dashboard Screenshot](<img width="1908" height="6268" alt="home" src="https://github.com/user-attachments/assets/256afe18-7aef-46f1-a95a-1e6de7134e35" />)
+![JanSetu Dashboard Screenshot]<img width="1908" height="6268" alt="home" src="https://github.com/user-attachments/assets/256afe18-7aef-46f1-a95a-1e6de7134e35" />
 
 > Placeholder for dashboard screenshot
 
