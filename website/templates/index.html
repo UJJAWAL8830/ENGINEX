@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,70 +12,105 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #f2f0e9; }
         h1, h2, h3 { font-family: 'Playfair Display', serif; }
         
-        /* Custom Logo Font */
         .font-logo {
             font-family: 'Outfit', sans-serif;
             letter-spacing: -0.02em;
         }
 
-        /* Smooth Fade In */
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
+        /* --- 1. MODERN ANIMATIONS --- */
+        .reveal {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
         }
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
-        
-        /* News Ticker */
-        .ticker-wrap {
-            width: 100%;
-            overflow: hidden;
-            background-color: #fef3c7;
-            padding-left: 100%;
-            box-sizing: border-box;
+
+        /* --- 2. GLASSMORPHISM NAVBAR --- */
+        .glass-nav {
+            background: rgba(250, 249, 246, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
         }
-        .ticker {
-            display: inline-block;
-            white-space: nowrap;
-            padding-right: 100%;
-            box-sizing: border-box;
-            animation: ticker 30s linear infinite;
+
+        /* --- 3. ANIMATED BACKGROUND (NO IMAGE) --- */
+        .digital-grid {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            width: 200%;
+            height: 200%;
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            transform: perspective(600px) rotateX(60deg) translateY(0) translateZ(-200px);
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
         }
-        @keyframes ticker {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
+
+        @keyframes gridMove {
+            0% { transform: perspective(600px) rotateX(60deg) translateY(0) translateZ(-200px); }
+            100% { transform: perspective(600px) rotateX(60deg) translateY(60px) translateZ(-200px); }
         }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            animation: floatOrb 15s ease-in-out infinite alternate;
+        }
+        .orb-1 { width: 500px; height: 500px; background: #b45309; top: -20%; left: 20%; }
+        .orb-2 { width: 600px; height: 600px; background: #78350f; bottom: -20%; right: 10%; animation-delay: -5s; }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 80px); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: rise 10s infinite linear;
+        }
+        @keyframes rise {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        /* --- 4. UTILITIES --- */
+        .text-shimmer { background-size: 200% auto; animation: shimmer 4s linear infinite; }
+        @keyframes shimmer { to { background-position: 200% center; } }
+
+        .hover-lift { transition: transform 0.4s ease, box-shadow 0.4s ease; }
+        .hover-lift:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -15px rgba(28, 25, 23, 0.1); }
     </style>
 </head>
-<body class="bg-[#f2f0e9] text-stone-800 antialiased selection:bg-amber-200">
+<body class="text-stone-800 antialiased selection:bg-amber-200">
 
-    <div class="fixed top-0 z-[60] w-full h-8 bg-amber-100 border-b border-amber-200 flex items-center text-xs font-bold text-amber-900">
-        <div class="px-4 bg-amber-200 h-full flex items-center z-10 shadow-sm">NATIONAL ALERTS:</div>
-        <div class="ticker-wrap h-full flex items-center">
-            <div class="ticker">
-                JanSetu Platform Live • 500+ New Services Added • PM-KISAN KYC Deadline Extended • Digital Health ID Creation Drive in Progress • Secure. Scalable. Seamless.
-            </div>
-        </div>
-    </div>
-
-    <nav class="fixed top-8 w-full z-50 bg-[#faf9f6]/90 backdrop-blur-md border-b border-stone-200/50 shadow-sm transition-all duration-300">
+    <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
-                
-                <a href="/" class="flex items-center">
-                    <span class="font-logo text-3xl font-extrabold text-stone-900 tracking-tight">
+                <a href="/" class="flex items-center group">
+                    <span class="font-logo text-3xl font-extrabold text-stone-900 tracking-tight group-hover:text-stone-700 transition-colors">
                         JANSETU
                     </span>
                 </a>
-
-                <a href="/login" class="group bg-stone-900 hover:bg-stone-800 text-[#f5f0e8] px-7 py-3 rounded-full font-medium transition-all shadow-md hover:shadow-lg flex items-center gap-2 text-sm">
-                    Login / Register
-                    <i data-lucide="arrow-right" class="h-4 w-4 group-hover:translate-x-1 transition-transform"></i>
+                <a href="/login" class="relative overflow-hidden group bg-stone-900 hover:bg-stone-800 text-[#f5f0e8] px-8 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-stone-900/30 flex items-center gap-2 text-sm">
+                    <span class="relative z-10">Login / Register</span>
+                    <i data-lucide="arrow-right" class="h-4 w-4 group-hover:translate-x-1 transition-transform relative z-10"></i>
+                    <div class="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-white/10"></div>
                 </a>
             </div>
         </div>
@@ -83,62 +118,74 @@
 
     <section class="relative w-full h-screen flex items-center justify-center overflow-hidden bg-stone-900">
         
-        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop" 
-             class="absolute inset-0 w-full h-full object-cover opacity-30"
-             onerror="this.style.display='none'"> <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/40 to-stone-900/80"></div>
-        
-        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center fade-in-up">
-            <div class="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur border border-white/20 text-amber-300 text-xs font-bold uppercase tracking-widest mb-8">
+        <div class="absolute inset-0 w-full h-full overflow-hidden">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            
+            <div class="digital-grid"></div>
+            
+            <div id="particles" class="absolute inset-0 w-full h-full pointer-events-none"></div>
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/30 to-stone-900/80"></div>
+        </div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center">
+            
+            <div class="reveal inline-flex items-center px-4 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-amber-300 text-xs font-bold uppercase tracking-widest mb-8 shadow-2xl">
                 <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse mr-2"></span>
                 National Digital Public Infrastructure
             </div>
             
-            <h1 class="text-6xl md:text-8xl font-extrabold text-white tracking-tight mb-8 leading-tight">
+            <h1 class="reveal delay-100 text-6xl md:text-8xl font-extrabold text-white tracking-tight mb-8 leading-tight">
                 One Nation. <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-500 text-shimmer">
                     One Digital Bridge.
                 </span>
             </h1>
             
-            <p class="mt-6 max-w-3xl mx-auto text-xl md:text-2xl text-stone-300 mb-12 font-light leading-relaxed">
+            <p class="reveal delay-200 mt-6 max-w-3xl mx-auto text-xl md:text-2xl text-stone-300 mb-12 font-light leading-relaxed">
                 Seamlessly connecting 1.4 Billion Citizens, Government Departments, and Developers through a single, secure, and unified ecosystem.
             </p>
 
-            <div class="flex flex-col md:flex-row justify-center gap-5">
-                <a href="/login" class="bg-amber-600 hover:bg-amber-700 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 flex items-center justify-center gap-3">
-                    Access Services
-                    <i data-lucide="chevron-right" class="h-5 w-5"></i>
+            <div class="reveal delay-300 flex flex-col md:flex-row justify-center gap-6 items-center">
+                
+                <a href="/login" class="relative group cursor-pointer w-64 h-16 rounded-full flex items-center justify-center p-[2px] overflow-hidden isolate shadow-2xl shadow-amber-600/20 hover:shadow-amber-600/40 transition-shadow">
+                    <div class="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#b45309_0%,#fbbf24_50%,#b45309_100%)]"></div>
+                    
+                    <div class="relative w-full h-full bg-stone-900 rounded-full flex items-center justify-center gap-3 z-10 transition-all group-hover:bg-stone-800">
+                        <span class="text-white font-bold text-lg tracking-wide">Access Services</span>
+                        <i data-lucide="chevron-right" class="h-5 w-5 text-amber-400 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
                 </a>
-                <a href="#ecosystem" class="px-10 py-5 rounded-2xl font-bold text-stone-300 bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-md flex items-center justify-center gap-3">
+                <a href="#ecosystem" class="px-10 py-5 rounded-full font-bold text-stone-300 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all backdrop-blur-md flex items-center justify-center gap-3">
                     <i data-lucide="play-circle" class="h-5 w-5"></i>
                     Watch Demo
                 </a>
             </div>
         </div>
 
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-stone-500">
-            <i data-lucide="arrow-down" class="h-6 w-6"></i>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-stone-500 opacity-70">
+            <i data-lucide="arrow-down" class="h-8 w-8"></i>
         </div>
     </section>
 
-    <section class="bg-stone-900 border-y border-white/10 relative z-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/10">
-                <div>
-                    <div class="text-4xl font-bold text-white mb-1 counter">1.4B+</div>
-                    <div class="text-xs font-bold text-stone-500 uppercase tracking-widest">Citizens Connected</div>
+    <section class="bg-stone-900 border-y border-white/5 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/5" id="stats-section">
+                <div class="reveal">
+                    <div class="text-4xl md:text-5xl font-bold text-white mb-2" data-target="1.4">0</div>
+                    <div class="text-xs font-bold text-stone-500 uppercase tracking-widest">Billion Citizens</div>
                 </div>
-                <div>
-                    <div class="text-4xl font-bold text-white mb-1 counter">3,500+</div>
+                <div class="reveal delay-100">
+                    <div class="text-4xl md:text-5xl font-bold text-white mb-2" data-target="3500">0</div>
                     <div class="text-xs font-bold text-stone-500 uppercase tracking-widest">Digital Services</div>
                 </div>
-                <div>
-                    <div class="text-4xl font-bold text-white mb-1">99.9%</div>
+                <div class="reveal delay-200">
+                    <div class="text-4xl md:text-5xl font-bold text-white mb-2">99.9%</div>
                     <div class="text-xs font-bold text-stone-500 uppercase tracking-widest">System Uptime</div>
                 </div>
-                <div>
-                    <div class="text-4xl font-bold text-white mb-1">256-bit</div>
-                    <div class="text-xs font-bold text-stone-500 uppercase tracking-widest">End-to-End Encrypted</div>
+                <div class="reveal delay-300">
+                    <div class="text-4xl md:text-5xl font-bold text-white mb-2">256<span class="text-2xl text-amber-500">bit</span></div>
+                    <div class="text-xs font-bold text-stone-500 uppercase tracking-widest">Encryption</div>
                 </div>
             </div>
         </div>
@@ -146,155 +193,155 @@
 
     <section id="ecosystem" class="py-32 bg-[#faf9f6]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center mb-24">
-                <span class="text-amber-700 font-bold tracking-widest uppercase text-sm">The Ecosystem</span>
-                <h2 class="text-4xl md:text-5xl font-bold text-stone-900 mt-3">Empowering Every Stakeholder</h2>
+            <div class="text-center mb-24 reveal">
+                <span class="text-amber-700 font-bold tracking-widest uppercase text-sm bg-amber-50 px-4 py-1 rounded-full border border-amber-100">The Ecosystem</span>
+                <h2 class="text-4xl md:text-6xl font-bold text-stone-900 mt-4 leading-tight">Empowering Every Stakeholder</h2>
             </div>
-
             <div class="flex flex-col gap-32">
-                
-                <div class="flex flex-col md:flex-row items-center gap-16 group">
-                    <div class="w-full md:w-1/2 h-[450px] bg-stone-200 rounded-[2rem] overflow-hidden shadow-2xl relative">
-                        <img src="https://images.unsplash.com/photo-1534536281715-e28d76689b4d?q=80&w=2070&auto=format&fit=crop" 
-                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                             alt="Citizen using app">
-                        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/80 to-transparent flex items-end p-8">
-                            <div class="text-white">
-                                <p class="text-sm font-bold text-amber-400 uppercase mb-1">Unified Dashboard</p>
-                                <p class="text-xl font-medium">Manage Health, Agri & Urban Services</p>
-                            </div>
+                <div class="flex flex-col md:flex-row items-center gap-16 group reveal">
+                    <div class="w-full md:w-1/2 h-[500px] bg-stone-200 rounded-[2.5rem] overflow-hidden shadow-2xl relative hover-lift">
+                        <img src="https://images.unsplash.com/photo-1534536281715-e28d76689b4d?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" alt="Citizen using app">
+                        <div class="absolute bottom-6 left-6 right-6 bg-stone-900/80 backdrop-blur-xl border border-white/10 p-6 rounded-2xl">
+                            <p class="text-xs font-bold text-amber-400 uppercase mb-1 flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Unified Dashboard
+                            </p>
+                            <p class="text-xl font-medium text-white">Manage Health, Agri & Urban Services</p>
                         </div>
                     </div>
                     <div class="w-full md:w-1/2">
-                        <div class="p-3 bg-amber-100 w-fit rounded-xl mb-6"><i data-lucide="user" class="h-6 w-6 text-amber-700"></i></div>
-                        <h3 class="text-4xl font-bold text-stone-900 mb-4">For Citizens</h3>
-                        <p class="text-stone-600 text-lg leading-relaxed mb-8">
+                        <div class="p-4 bg-amber-100 w-fit rounded-2xl mb-6 shadow-inner"><i data-lucide="user" class="h-8 w-8 text-amber-700"></i></div>
+                        <h3 class="text-4xl md:text-5xl font-bold text-stone-900 mb-6">For Citizens</h3>
+                        <p class="text-stone-600 text-lg leading-relaxed mb-8 border-l-4 border-amber-200 pl-6">
                             No more standing in queues. Access medical records, check crop prices, apply for subsidies, and report civic issues from a single, intuitive dashboard.
                         </p>
-                        <a href="/login" class="text-amber-700 font-bold flex items-center gap-2 hover:gap-3 transition-all">Explore Citizen Services <i data-lucide="arrow-right" class="h-4 w-4"></i></a>
+                        <a href="/login" class="text-amber-700 font-bold text-lg flex items-center gap-2 hover:gap-4 transition-all">Explore Citizen Services <i data-lucide="arrow-right" class="h-5 w-5"></i></a>
                     </div>
                 </div>
-
-                <div class="flex flex-col md:flex-row-reverse items-center gap-16 group">
-                    <div class="w-full md:w-1/2 h-[450px] bg-stone-200 rounded-[2rem] overflow-hidden shadow-2xl relative">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" 
-                              class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                              alt="Government Analytics">
-                        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/80 to-transparent flex items-end p-8">
-                            <div class="text-white">
-                                <p class="text-sm font-bold text-blue-400 uppercase mb-1">Command Center</p>
-                                <p class="text-xl font-medium">Real-time Analytics & Governance</p>
-                            </div>
+                <div class="flex flex-col md:flex-row-reverse items-center gap-16 group reveal">
+                    <div class="w-full md:w-1/2 h-[500px] bg-stone-200 rounded-[2.5rem] overflow-hidden shadow-2xl relative hover-lift">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" alt="Government Analytics">
+                        <div class="absolute bottom-6 left-6 right-6 bg-stone-900/80 backdrop-blur-xl border border-white/10 p-6 rounded-2xl">
+                            <p class="text-xs font-bold text-blue-400 uppercase mb-1 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> Command Center</p>
+                            <p class="text-xl font-medium text-white">Real-time Analytics & Governance</p>
                         </div>
                     </div>
                     <div class="w-full md:w-1/2 md:text-right flex flex-col items-end">
-                        <div class="p-3 bg-blue-100 w-fit rounded-xl mb-6"><i data-lucide="landmark" class="h-6 w-6 text-blue-700"></i></div>
-                        <h3 class="text-4xl font-bold text-stone-900 mb-4">For Administrators</h3>
-                        <p class="text-stone-600 text-lg leading-relaxed mb-8">
-                            Break silos between departments. Monitor service delivery in real-time, manage approvals efficiently, and make data-driven decisions for the nation.
-                        </p>
-                        <a href="#" class="text-blue-700 font-bold flex items-center gap-2 hover:gap-3 transition-all">View Admin Capabilities <i data-lucide="arrow-right" class="h-4 w-4"></i></a>
+                        <div class="p-4 bg-blue-100 w-fit rounded-2xl mb-6 shadow-inner"><i data-lucide="landmark" class="h-8 w-8 text-blue-700"></i></div>
+                        <h3 class="text-4xl md:text-5xl font-bold text-stone-900 mb-6">For Administrators</h3>
+                        <p class="text-stone-600 text-lg leading-relaxed mb-8 border-r-4 border-blue-200 pr-6">Break silos between departments. Monitor service delivery in real-time, manage approvals efficiently.</p>
+                        <a href="#" class="text-blue-700 font-bold text-lg flex items-center gap-2 hover:gap-4 transition-all">View Admin Capabilities <i data-lucide="arrow-right" class="h-5 w-5"></i></a>
                     </div>
                 </div>
-
-                <div class="flex flex-col md:flex-row items-center gap-16 group">
-                    <div class="w-full md:w-1/2 h-[450px] bg-stone-200 rounded-[2rem] overflow-hidden shadow-2xl relative">
-                         <img src="https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=2070&auto=format&fit=crop" 
-                              class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                              alt="Developer Code">
-                        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/80 to-transparent flex items-end p-8">
-                            <div class="text-white">
-                                <p class="text-sm font-bold text-purple-400 uppercase mb-1">Open API Standard</p>
-                                <p class="text-xl font-medium">Plug & Play Service Integration</p>
-                            </div>
+                <div class="flex flex-col md:flex-row items-center gap-16 group reveal">
+                    <div class="w-full md:w-1/2 h-[500px] bg-stone-200 rounded-[2.5rem] overflow-hidden shadow-2xl relative hover-lift">
+                         <img src="https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" alt="Developer Code">
+                        <div class="absolute bottom-6 left-6 right-6 bg-stone-900/80 backdrop-blur-xl border border-white/10 p-6 rounded-2xl">
+                            <p class="text-xs font-bold text-purple-400 uppercase mb-1 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span> Open API Standard</p>
+                            <p class="text-xl font-medium text-white">Plug & Play Service Integration</p>
                         </div>
                     </div>
                     <div class="w-full md:w-1/2">
-                        <div class="p-3 bg-purple-100 w-fit rounded-xl mb-6"><i data-lucide="code-2" class="h-6 w-6 text-purple-700"></i></div>
-                        <h3 class="text-4xl font-bold text-stone-900 mb-4">For Developers</h3>
-                        <p class="text-stone-600 text-lg leading-relaxed mb-8">
-                            Contribute to the Digital India stack. Use our standardized APIs to build and register new services, ensuring rapid deployment and scalability.
-                        </p>
-                        <a href="#" class="text-purple-700 font-bold flex items-center gap-2 hover:gap-3 transition-all">Read API Documentation <i data-lucide="arrow-right" class="h-4 w-4"></i></a>
+                        <div class="p-4 bg-purple-100 w-fit rounded-2xl mb-6 shadow-inner"><i data-lucide="code-2" class="h-8 w-8 text-purple-700"></i></div>
+                        <h3 class="text-4xl md:text-5xl font-bold text-stone-900 mb-6">For Developers</h3>
+                        <p class="text-stone-600 text-lg leading-relaxed mb-8 border-l-4 border-purple-200 pl-6">Contribute to the Digital India stack. Use our standardized APIs to build and register new services.</p>
+                        <a href="#" class="text-purple-700 font-bold text-lg flex items-center gap-2 hover:gap-4 transition-all">Read API Documentation <i data-lucide="arrow-right" class="h-5 w-5"></i></a>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <section class="py-24 bg-white border-t border-stone-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-3 gap-12">
-                <div class="bg-[#faf9f6] p-8 rounded-2xl border border-stone-100 hover:shadow-lg transition-all">
-                    <i data-lucide="fingerprint" class="h-10 w-10 text-stone-700 mb-6"></i>
-                    <h4 class="text-xl font-bold text-stone-900 mb-3">Single Sign-On</h4>
-                    <p class="text-stone-600">One ID for everything. Log in securely to any government department using your JanSetu ID.</p>
+    <section class="py-32 bg-white border-t border-stone-100 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-amber-50 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-stone-50 rounded-full blur-3xl opacity-50 translate-y-1/2 -translate-x-1/2"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="reveal bg-[#faf9f6] p-10 rounded-[2rem] border border-stone-100 hover:border-stone-200 hover:shadow-2xl transition-all duration-300 group hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-8 group-hover:scale-110 transition-transform"><i data-lucide="fingerprint" class="h-8 w-8 text-stone-700"></i></div>
+                    <h4 class="text-2xl font-bold text-stone-900 mb-4">Single Sign-On</h4>
+                    <p class="text-stone-600 leading-relaxed">One ID for everything. Log in securely to any government department using your JanSetu ID.</p>
                 </div>
-                <div class="bg-[#faf9f6] p-8 rounded-2xl border border-stone-100 hover:shadow-lg transition-all">
-                    <i data-lucide="file-check" class="h-10 w-10 text-stone-700 mb-6"></i>
-                    <h4 class="text-xl font-bold text-stone-900 mb-3">Paperless & Presenceless</h4>
-                    <p class="text-stone-600">Apply for certificates, pay bills, and receive benefits without ever visiting a government office.</p>
+                <div class="reveal delay-100 bg-[#faf9f6] p-10 rounded-[2rem] border border-stone-100 hover:border-stone-200 hover:shadow-2xl transition-all duration-300 group hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-8 group-hover:scale-110 transition-transform"><i data-lucide="file-check" class="h-8 w-8 text-stone-700"></i></div>
+                    <h4 class="text-2xl font-bold text-stone-900 mb-4">Paperless</h4>
+                    <p class="text-stone-600 leading-relaxed">Apply for certificates, pay bills, and receive benefits without ever visiting a government office.</p>
                 </div>
-                <div class="bg-[#faf9f6] p-8 rounded-2xl border border-stone-100 hover:shadow-lg transition-all">
-                    <i data-lucide="lock" class="h-10 w-10 text-stone-700 mb-6"></i>
-                    <h4 class="text-xl font-bold text-stone-900 mb-3">Consent-Based Privacy</h4>
-                    <p class="text-stone-600">Your data belongs to you. Share only what is necessary with departments via our consent architecture.</p>
+                <div class="reveal delay-200 bg-[#faf9f6] p-10 rounded-[2rem] border border-stone-100 hover:border-stone-200 hover:shadow-2xl transition-all duration-300 group hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-8 group-hover:scale-110 transition-transform"><i data-lucide="lock" class="h-8 w-8 text-stone-700"></i></div>
+                    <h4 class="text-2xl font-bold text-stone-900 mb-4">Privacy First</h4>
+                    <p class="text-stone-600 leading-relaxed">Your data belongs to you. Share only what is necessary with departments via our consent architecture.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-stone-900 text-stone-400 py-16">
+    <footer class="bg-stone-900 text-stone-400 py-20 border-t border-stone-800">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="flex items-center justify-center gap-2 mb-8">
-                <span class="font-logo text-4xl text-white tracking-tight">JANSETU</span>
+            <div class="flex items-center justify-center gap-3 mb-10 group cursor-pointer">
+                <span class="font-logo text-4xl text-white tracking-tight group-hover:text-amber-50 transition-colors">JANSETU</span>
             </div>
-            
-            <div class="grid md:grid-cols-4 gap-8 text-sm mb-12 text-left md:text-center">
-                <div>
-                    <h5 class="text-white font-bold mb-4">Platform</h5>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="hover:text-amber-500">About JanSetu</a></li>
-                        <li><a href="#" class="hover:text-amber-500">Services List</a></li>
-                        <li><a href="#" class="hover:text-amber-500">Statistics</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h5 class="text-white font-bold mb-4">Resources</h5>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="hover:text-amber-500">API Docs</a></li>
-                        <li><a href="#" class="hover:text-amber-500">User Manual</a></li>
-                        <li><a href="#" class="hover:text-amber-500">FAQs</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h5 class="text-white font-bold mb-4">Legal</h5>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="hover:text-amber-500">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-amber-500">Terms of Service</a></li>
-                        <li><a href="#" class="hover:text-amber-500">Grievance Redressal</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h5 class="text-white font-bold mb-4">Connect</h5>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="hover:text-amber-500">Twitter / X</a></li>
-                        <li><a href="#" class="hover:text-amber-500">LinkedIn</a></li>
-                        <li><a href="#" class="hover:text-amber-500">Contact Us</a></li>
-                    </ul>
-                </div>
+            <div class="grid md:grid-cols-4 gap-12 text-sm mb-16 text-left md:text-center border-b border-white/10 pb-12">
+                <div><h5 class="text-white font-bold mb-6 tracking-widest uppercase text-xs">Platform</h5><ul class="space-y-3"><li><a href="#" class="hover:text-amber-500 transition-colors">About JanSetu</a></li><li><a href="#" class="hover:text-amber-500 transition-colors">Services List</a></li></ul></div>
+                <div><h5 class="text-white font-bold mb-6 tracking-widest uppercase text-xs">Resources</h5><ul class="space-y-3"><li><a href="#" class="hover:text-amber-500 transition-colors">API Docs</a></li><li><a href="#" class="hover:text-amber-500 transition-colors">FAQs</a></li></ul></div>
+                <div><h5 class="text-white font-bold mb-6 tracking-widest uppercase text-xs">Legal</h5><ul class="space-y-3"><li><a href="#" class="hover:text-amber-500 transition-colors">Privacy Policy</a></li><li><a href="#" class="hover:text-amber-500 transition-colors">Terms of Service</a></li></ul></div>
+                <div><h5 class="text-white font-bold mb-6 tracking-widest uppercase text-xs">Connect</h5><ul class="space-y-3"><li><a href="#" class="hover:text-amber-500 transition-colors">Twitter / X</a></li><li><a href="#" class="hover:text-amber-500 transition-colors">Contact Us</a></li></ul></div>
             </div>
-
-            <div class="border-t border-white/10 pt-8 text-xs opacity-50">
+            <div class="pt-8 text-xs opacity-40 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p>© 2026 Government of India. Hackathon Project. All rights reserved.</p>
+                <div class="flex gap-4"><span>Made with ❤️ for Digital India</span></div>
             </div>
         </div>
     </footer>
 
     <script>
         lucide.createIcons();
+
+        // 1. Scroll Reveal Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    if(entry.target.querySelector('[data-target]')) { animateCounters(); }
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 2. Counter Animation
+        let countersAnimated = false;
+        function animateCounters() {
+            if(countersAnimated) return;
+            countersAnimated = true;
+            const counters = document.querySelectorAll('[data-target]');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const suffix = target === 1.4 ? "B+" : "+";
+                const speed = 200;
+                const updateCount = () => {
+                    const count = +counter.innerText.replace(/[^\d.]/g, '');
+                    const inc = target / speed;
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc) + (count + inc >= target ? suffix : "");
+                        setTimeout(updateCount, 20);
+                    } else {
+                        counter.innerText = target + suffix;
+                    }
+                };
+                updateCount();
+            });
+        }
+
+        // 3. Particle Generator for Background
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 25; i++) {
+            const span = document.createElement('span');
+            span.classList.add('particle');
+            span.style.left = Math.random() * 100 + '%';
+            span.style.animationDelay = Math.random() * 10 + 's';
+            span.style.animationDuration = (8 + Math.random() * 15) + 's';
+            span.style.opacity = Math.random() * 0.5 + 0.1;
+            particlesContainer.appendChild(span);
+        }
     </script>
 
 </body>
