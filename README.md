@@ -97,4 +97,42 @@ Perfect for demonstrating real-world behavior in a hackathon prototype.
 
 *Database*
 - PostgreSQL (Production-ready)
+  
+## Installation & Setup
+*Follow these steps to run the project locally.*
+Steps
 
+Clone the Repository
+
+```Bash
+git clone https://github.com/your-username/jansetu-platform.git
+cd jansetu-platform
+```
+Create Virtual Environment
+```Bash
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# Mac/Linux
+source venv/bin/activate
+```
+
+Install Dependencies
+
+```Bash
+pip install -r requirements.txt
+```
+Set Environment Variables Create a .env file in the root directory:
+
+Code snippet
+FLASK_APP=app.py
+FLASK_ENV=development
+GEMINI_API_KEY=your_google_api_key_here
+SECRET_KEY=your_secret_key_here
+DATABASE_URL=sqlite:///jansetu.db
+Run the Application
+
+```Bash
+flask run
+```
+Access the app at http://127.0.0.1:5000/.
