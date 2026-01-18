@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JanSetu | Citizen Dashboard</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        
+        /* Smooth Fade In Animation */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* News Ticker Animation */
+        .ticker-wrap {
+            width: 100%;
+            overflow: hidden;
+            background-color: #fef3c7;
+            padding-left: 100%;
+            box-sizing: border-box;
+        }
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            padding-right: 100%;
+            box-sizing: border-box;
+            animation: ticker 30s linear infinite;
+        }
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+    </style>
+</head>
+<body class="bg-[#f2f0e9] text-stone-800 antialiased selection:bg-amber-200">
+
+    <div class="fixed top-0 z-[60] w-full h-8 bg-amber-100 border-b border-amber-200 flex items-center text-xs font-bold text-amber-900">
+        <div class="px-4 bg-amber-200 h-full flex items-center z-10 shadow-sm">LATEST UPDATES:</div>
+        <div class="ticker-wrap h-full flex items-center">
+            <div class="ticker">
+                PM Kisan installment credited • Polio Vaccination Camp this Sunday at all District Hospitals • Deadline for Income Tax filing extended to 31st July • Heavy Rain Alert in Coastal Districts • New Subsidy for Solar Panels announced.
+            </div>
+        </div>
+    </div>
+
+    <nav class="fixed top-8 w-full z-50 bg-[#faf9f6]/95 backdrop-blur-md border-b border-stone-200 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <a href="{{ url_for('routes.home') }}" class="flex items-center">
+                    <span class="font-logo text-3xl font-extrabold text-stone-900 tracking-tight">
+                        JANSETU
+                    </span>
+                </a>
+
+                <div class="hidden md:flex space-x-8">
+                    <a href="{{ url_for('routes.home') }}" class="text-amber-800 font-bold border-b-2 border-amber-700 px-1 py-1">DASHBOARD</a>
+                    <a href="{{ url_for('routes.services') }}" class="text-stone-500 hover:text-stone-900 font-medium px-1 py-1 transition-colors">SERVICES</a>
+                    <a href="{{ url_for('routes.notices') }}" class="text-stone-500 hover:text-stone-900 font-medium px-1 py-1 transition-colors">NOTICES</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex items-center gap-3 px-3 py-1 bg-white rounded-full border border-stone-200 shadow-sm">
+                        <img src="https://ui-avatars.com/api/?name={{ current_user.full_name|urlencode }}&background=1c1917&color=fff&bold=true" 
+     class="w-8 h-8 rounded-full border-2 border-amber-100 shadow-sm"
+     alt="{{ current_user.full_name }}">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-stone-800 leading-none">{{ current_user.full_name }}</span>
+                            <span class="text-[10px] text-green-600 font-bold leading-none">● Verified Citizen</span>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('auth.logout') }}" class="p-2 text-stone-400 hover:text-red-600 transition-colors">
+                        <i data-lucide="power" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative w-full pt-32 pb-32 overflow-hidden bg-stone-900">
+        
+        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=2144&auto=format&fit=crop" 
+             class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-luminosity">
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/60 to-transparent"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-end pb-12">
+            <div class="max-w-2xl mb-8 md:mb-0">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase mb-4">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Live System
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
+                    One Platform. <br> Endless Possibilities.
+                </h1>
+                <p class="text-stone-300 text-lg font-light max-w-lg">
+                    Manage your identity, finances, and government requests from a single secure dashboard.
+                </p>
+            </div>
+            
+            <div class="text-right text-stone-400">
+                <p class="text-3xl font-bold text-white" id="clock">10:42 AM</p>
+                <p class="text-sm font-medium">Saturday, 27 Jan 2026</p>
+                <p class="text-xs mt-1 text-amber-500">Ahmedabad • 28°C AQI 112</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative z-20 -mt-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="glass-panel rounded-2xl shadow-xl p-6 grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-stone-200">
+                
+                <div class="flex items-center gap-4 px-4">
+                    <div class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center border border-green-100">
+                        <i data-lucide="indian-rupee" class="h-6 w-6 text-green-700"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">DBT Balance</p>
+                        <h3 class="text-2xl font-bold text-stone-800">₹ 6,000.00</h3>
+                        <p class="text-xs font-medium text-green-600 flex items-center gap-1">
+                            <i data-lucide="check-circle" class="w-3 h-3"></i> Credited via PM-KISAN
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 px-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
+                        <i data-lucide="fingerprint" class="h-6 w-6 text-blue-700"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Digital Identity</p>
+                        <h3 class="text-2xl font-bold text-stone-800">Verified</h3>
+                        <p class="text-xs font-medium text-stone-500">Aadhaar, PAN, DL Linked</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 px-4">
+                    <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center border border-orange-100">
+                        <i data-lucide="clock" class="h-6 w-6 text-orange-700"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider">Active Requests</p>
+                        <h3 class="text-2xl font-bold text-stone-800">1 Pending</h3>
+                        <p class="text-xs font-medium text-orange-600">Passport Renewal - Step 2</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-2 space-y-8">
+                
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                    <h3 class="text-sm font-bold text-stone-500 uppercase mb-6">Priority Actions</h3>
+                    <div class="grid grid-cols-4 gap-4 text-center">
+                        <a href="#" class="group flex flex-col items-center gap-2">
+                            <div class="w-14 h-14 rounded-full bg-red-50 border border-red-100 flex items-center justify-center group-hover:bg-red-600 transition-all">
+                                <i data-lucide="sos" class="h-6 w-6 text-red-600 group-hover:text-white"></i>
+                            </div>
+                            <span class="text-xs font-bold text-stone-700">SOS Safety</span>
+                        </a>
+                        <a href="#" class="group flex flex-col items-center gap-2">
+                            <div class="w-14 h-14 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 transition-all">
+                                <i data-lucide="folder-lock" class="h-6 w-6 text-blue-600 group-hover:text-white"></i>
+                            </div>
+                            <span class="text-xs font-bold text-stone-700">DigiLocker</span>
+                        </a>
+                        <a href="#" class="group flex flex-col items-center gap-2">
+                            <div class="w-14 h-14 rounded-full bg-amber-50 border border-amber-100 flex items-center justify-center group-hover:bg-amber-600 transition-all">
+                                <i data-lucide="alert-octagon" class="h-6 w-6 text-amber-600 group-hover:text-white"></i>
+                            </div>
+                            <span class="text-xs font-bold text-stone-700">Grievance</span>
+                        </a>
+                        <a href="#" class="group flex flex-col items-center gap-2">
+                            <div class="w-14 h-14 rounded-full bg-purple-50 border border-purple-100 flex items-center justify-center group-hover:bg-purple-600 transition-all">
+                                <i data-lucide="users" class="h-6 w-6 text-purple-600 group-hover:text-white"></i>
+                            </div>
+                            <span class="text-xs font-bold text-stone-700">Family ID</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-stone-800">Benefits Received Analysis</h3>
+                        <select class="text-xs bg-stone-100 border-none rounded-md px-2 py-1 text-stone-600 cursor-pointer">
+                            <option>FY 2025-26</option>
+                            <option>FY 2024-25</option>
+                        </select>
+                    </div>
+                    <div class="h-64 w-full">
+                        <canvas id="benefitsChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-stone-100 bg-stone-50/50">
+                        <h3 class="text-sm font-bold text-stone-700">Recent Interactions</h3>
+                    </div>
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-stone-400 uppercase bg-stone-50">
+                            <tr>
+                                <th class="px-6 py-3">Service</th>
+                                <th class="px-6 py-3">Date</th>
+                                <th class="px-6 py-3">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-100">
+                            <tr>
+                                <td class="px-6 py-4 font-medium">Electricity Bill Payment</td>
+                                <td class="px-6 py-4">Jan 25, 2026</td>
+                                <td class="px-6 py-4 text-green-600 font-bold">Success</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium">Pothole Report (#8821)</td>
+                                <td class="px-6 py-4">Jan 22, 2026</td>
+                                <td class="px-6 py-4 text-orange-600 font-bold">In Progress</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium">Tele-consultation (Dr. Mehta)</td>
+                                <td class="px-6 py-4">Jan 18, 2026</td>
+                                <td class="px-6 py-4 text-blue-600 font-bold">Completed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="space-y-8">
+                
+                <div class="bg-stone-900 text-white p-6 rounded-2xl shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16"></div>
+                    <h3 class="text-lg font-bold mb-4">Schemes For You</h3>
+                    <p class="text-stone-400 text-sm mb-6">Based on your profile, you are eligible for 3 new government benefits.</p>
+                    
+                    <div class="space-y-3">
+                        <div class="bg-white/10 p-3 rounded-lg flex items-center justify-between hover:bg-white/20 cursor-pointer transition-all">
+                            <span class="text-sm font-medium">PM Surya Ghar Yojana</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-amber-400"></i>
+                        </div>
+                        <div class="bg-white/10 p-3 rounded-lg flex items-center justify-between hover:bg-white/20 cursor-pointer transition-all">
+                            <span class="text-sm font-medium">Ayushman Bharat</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-amber-400"></i>
+                        </div>
+                        <div class="bg-white/10 p-3 rounded-lg flex items-center justify-between hover:bg-white/20 cursor-pointer transition-all">
+                            <span class="text-sm font-medium">Skill India Mission</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-amber-400"></i>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full mt-6 bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl transition-all">
+                        Apply Now
+                    </button>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm">
+                    <h3 class="text-sm font-bold text-stone-700 mb-4">Nearby Services</h3>
+                    <div class="w-full h-48 bg-stone-100 rounded-xl relative overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop" class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <button class="bg-white px-4 py-2 rounded-lg text-xs font-bold shadow-md flex items-center gap-2">
+                                <i data-lucide="map-pin" class="w-3 h-3 text-red-500"></i> View Map
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt-4 space-y-2">
+                        <div class="flex justify-between text-xs border-b border-stone-100 pb-2">
+                            <span class="text-stone-600">Civil Hospital</span>
+                            <span class="font-bold">1.2 km</span>
+                        </div>
+                        <div class="flex justify-between text-xs border-b border-stone-100 pb-2">
+                            <span class="text-stone-600">Police Station</span>
+                            <span class="font-bold">0.8 km</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-stone-600">APMC Market (Mandi)</span>
+                            <span class="font-bold">3.5 km</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-12 bg-stone-100 border-t border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-stone-900 mb-8 text-center">Core Services</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all group cursor-pointer">
+                    <div class="h-40 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                        <div class="absolute top-3 right-3 bg-white/90 px-2 py-1 rounded text-xs font-bold text-green-700">Active</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Health</h3>
+                        <p class="text-stone-500 text-sm mb-4">Tele-consultation, Bed availability, Medicines.</p>
+                        <span class="text-amber-700 text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">View <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+                    </div>
+                </div>
+                 <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all group cursor-pointer">
+                    <div class="h-40 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?q=80&w=2071&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                        <div class="absolute top-3 right-3 bg-white/90 px-2 py-1 rounded text-xs font-bold text-green-700">Active</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Agriculture</h3>
+                        <p class="text-stone-500 text-sm mb-4">Mandi prices, Soil Health Card, Crop Insurance.</p>
+                        <span class="text-amber-700 text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">View <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+                    </div>
+                </div>
+                 <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all group cursor-pointer">
+                    <div class="h-40 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                        <div class="absolute top-3 right-3 bg-white/90 px-2 py-1 rounded text-xs font-bold text-green-700">Active</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Urban</h3>
+                        <p class="text-stone-500 text-sm mb-4">Property Tax, Utility Bills, Complaint Reg.</p>
+                        <span class="text-amber-700 text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">View <i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 max-w-4xl mx-auto px-4">
+        <h2 class="text-2xl font-bold text-stone-900 mb-8 text-center">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+            <details class="group bg-white p-6 rounded-xl border border-stone-200 cursor-pointer open:border-amber-500 transition-all">
+                <summary class="flex justify-between items-center font-bold text-stone-800 list-none">
+                    How do I link my bank account for DBT?
+                    <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-5 h-5"></i></span>
+                </summary>
+                <div class="text-stone-600 mt-3 text-sm leading-relaxed">
+                    Go to the "Financial Services" section in the dashboard. Select "Link Bank Account," enter your account number and IFSC code. Verification will take 24-48 hours.
+                </div>
+            </details>
+            <details class="group bg-white p-6 rounded-xl border border-stone-200 cursor-pointer open:border-amber-500 transition-all">
+                <summary class="flex justify-between items-center font-bold text-stone-800 list-none">
+                    Is my data secure on JanSetu?
+                    <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-5 h-5"></i></span>
+                </summary>
+                <div class="text-stone-600 mt-3 text-sm leading-relaxed">
+                    Yes, JanSetu uses 256-bit encryption and is compliant with the National Data Security Policy. Your personal data is only shared with specific departments upon your authorization.
+                </div>
+            </details>
+            <details class="group bg-white p-6 rounded-xl border border-stone-200 cursor-pointer open:border-amber-500 transition-all">
+                <summary class="flex justify-between items-center font-bold text-stone-800 list-none">
+                    How to report a civic issue?
+                    <span class="transition group-open:rotate-180"><i data-lucide="chevron-down" class="w-5 h-5"></i></span>
+                </summary>
+                <div class="text-stone-600 mt-3 text-sm leading-relaxed">
+                    Click on the orange "Grievance" circle in the Quick Access menu. Select the category (Pothole, Garbage, Streetlight), upload a photo, and submit. You will receive a tracking ID instantly.
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <footer class="bg-stone-900 text-stone-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-2 mb-6">
+                <i data-lucide="building-2" class="h-6 w-6 text-amber-500"></i>
+                <span class="font-bold text-xl text-white">JAN<span class="text-amber-500">SETU</span></span>
+            </div>
+            <p class="mb-8 text-sm max-w-md mx-auto">Bridging the gap between Governance and Citizens through Technology, Transparency, and Trust.</p>
+            <div class="flex justify-center gap-6 text-sm font-medium mb-8">
+                <a href="#" class="hover:text-white">About</a>
+                <a href="#" class="hover:text-white">Privacy Policy</a>
+                <a href="#" class="hover:text-white">Help Center</a>
+                <a href="#" class="hover:text-white">Contact</a>
+            </div>
+            <p class="text-xs opacity-50">© 2026 Government of India. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Clock Script
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Chart.js Configuration
+        const ctx = document.getElementById('benefitsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Subsidy Received (₹)',
+                    data: [2000, 0, 2000, 4500, 2000, 6000],
+                    backgroundColor: '#d97706',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { display: false } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
