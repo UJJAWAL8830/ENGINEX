@@ -24,22 +24,25 @@ class AgriCenter(db.Model):
     # System metadata for dashboard tracking 
     is_active = db.Column(db.Boolean, default=True)
     date_established = db.Column(db.DateTime, default=datetime.utcnow)
+# <<<<<<< Database
 
 
-class AgriComplaint(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+# class AgriComplaint(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
     
-    # 1. Foreign Key linking to the Citizen
-    citizen_id = db.Column(db.Integer, db.ForeignKey('citizens.id'), nullable=False)
+#     # 1. Foreign Key linking to the Citizen
+#     citizen_id = db.Column(db.Integer, db.ForeignKey('citizens.id'), nullable=False)
     
-    # 2. Form Fields based on UI image_34ff48.png
-    issue_type = db.Column(db.String(100), nullable=False) # e.g., 'Crop Insurance', 'Mandi Prices'
-    description = db.Column(db.Text, nullable=False)
-    evidence_url = db.Column(db.String(255)) # Stores path to the uploaded photo
+#     # 2. Form Fields based on UI image_34ff48.png
+#     issue_type = db.Column(db.String(100), nullable=False) # e.g., 'Crop Insurance', 'Mandi Prices'
+#     description = db.Column(db.Text, nullable=False)
+#     evidence_url = db.Column(db.String(255)) # Stores path to the uploaded photo
     
-    # 3. Metadata for Tracking
-    status = db.Column(db.String(20), default='Pending') # Pending, In Progress, Resolved
-    date_submitted = db.Column(db.DateTime(timezone=True), default=func.now())
+#     # 3. Metadata for Tracking
+#     status = db.Column(db.String(20), default='Pending') # Pending, In Progress, Resolved
+#     date_submitted = db.Column(db.DateTime(timezone=True), default=func.now())
     
-    # Relationship to easily access citizen details from a complaint
-    citizen = db.relationship('Citizens', backref='agri_complaints')
+#     # Relationship to easily access citizen details from a complaint
+#     citizen = db.relationship('Citizens', backref='agri_complaints')
+# =======
+# >>>>>>> main

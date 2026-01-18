@@ -6,8 +6,14 @@ from config import Config
 db = SQLAlchemy()
 
 def create_app():
-    app = Flask(__name__)
-    app.config.from_object(Config)
+# <<<<<<< Database
+#     app = Flask(__name__)
+# =======
+#     app = Flask(_name_)
+    
+#     # Apply centralized configurations [cite: 7, 26]
+# >>>>>>> main
+#     app.config.from_object(Config)
 
     db.init_app(app)
 
