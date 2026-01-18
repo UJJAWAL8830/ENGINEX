@@ -4,24 +4,23 @@ from .models import AgriCenter
 from ..models import Citizens,Complaint,db
 from . import agri
 
-
 @agri.route('/agri_dashboard')
-@login_required
 def agri_dashboard():
-    # Role Verification: Only citizens can access agricultural support services [cite: 49]
+    # Role Verification
     if not isinstance(current_user, Citizens):
         flash("Access Denied: This dashboard is for Citizens/Farmers.", category="error")
         return redirect(url_for('auth.login'))
 
-    # ORM query: Get centers located in the user's city
-    # This fulfills the goal of providing "farmer support" at a local scale [cite: 21, 26]
-    user_city = current_user.city
-    centers = AgriCenter.query.filter_by(city=user_city).all()
+    # Match the user's city to the AgriCenter's district or village_block
+    user_location = current_user.city 
+    
+    # We change .filter_by(city=...) to .filter_by(district=...) 
+    # because 'city' does not exist in your AgriCenter class
+    centers = AgriCenter.query.filter_by(district=user_location).all()
     
     return render_template("agri/agri_dashboard.html", 
                            centers=centers, 
-                           city=user_city)
-
+                           city=user_location)
 @agri.route('/file-grievance', methods=['GET', 'POST'])
 @login_required
 def file_grievance():

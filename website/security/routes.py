@@ -3,6 +3,16 @@ from flask_login import login_required, current_user
 from ..models import Citizens, Complaint, db
 from . import security
 
+@security.route('/dashboard')
+def security_dashboard():
+    # 1. Manual Authentication Check
+    if not current_user.is_authenticated:
+        return redirect(url_for('auth.login'))
+
+    # 2. Strict Role & Sector Gatekeeping
+    # Ensures only 'Security' sector officials can enter
+    return render_template("security/security_dashboard.html", user=current_user)
+
 @security.route('/city-complaint', methods=['GET', 'POST'])
 @login_required
 def city_complaint():
